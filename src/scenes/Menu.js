@@ -5,8 +5,8 @@ class Menu extends Phaser.Scene {
 
     preload(){
         // load assets
-        this.load.image('menu', './assets/menu.png');
-        this.load.image('scientist', './assets/sci1.png');
+        // hey changed this to a cropped menu so you can read it on the smaller screen size
+        this.load.image('menu', './assets/menu2.png');
     }
 
     create() {

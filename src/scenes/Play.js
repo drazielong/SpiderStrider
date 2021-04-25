@@ -6,10 +6,10 @@ class Play extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
-        this.load.image('scientist', './assets/sci1.png');
         
         // load spritesheet
-        this.load.spritesheet('run', './assets/run.png', {frameWidth: 528, frameHeight: 280, startFrame: 0, endFrame: 1});
+        this.load.spritesheet('run', './assets/run.png', {frameWidth: 264, frameHeight: 280, startFrame: 0, endFrame: 1});
+        this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
     }
 
     create() {
@@ -29,12 +29,26 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'run',
             frames: this.anims.generateFrameNumbers('run', { start: 0, end: 1, first: 0}),
-            frameRate: 7
+            frameRate: 5,
+            repeat: -1
         });
 
-        // add rocket (p1)
-        this.scientist = new Runner(this, 400, 200, 'scientist').setOrigin(0.5, 0);
-        //scientist.play("run");
+        this.anims.create({
+            key: 'spiderRun',
+            frames: this.anims.generateFrameNumbers('spiderRun', { start: 0, end: 7, first: 0}),
+            frameRate: 12,
+            repeat: -1
+        });
+
+        // add player
+        this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
+        this.scientist.anims.play('run');
+
+        //add spider
+        let spider = this.add.sprite(-400, 50, 'spiderRun').setOrigin(0, 0);
+        spider.anims.play('spiderRun');
+
+        //if player hits an obstacle, set spider's X to -300 :)
 
         // define keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -45,7 +59,7 @@ class Play extends Phaser.Scene {
 
     update() {
         // makes background scroll
-        this.lab.tilePositionX += 40;
+        this.lab.tilePositionX += 15;
 
         this.scientist.update();
        
