@@ -41,8 +41,15 @@ class Play extends Phaser.Scene {
         });
 
         // add player
-        this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
+        //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
+        this.scientist = this.physics.add.sprite(400, 200, 'platformer_atlas','run').setOrigin(0.5,0);
         this.scientist.anims.play('run');
+        this.scientist.isRunning = false;
+        this.scientist.moveSpeed = 7;
+        this.scientist.isJumping = false;
+        this.scientist.isSliding = false;
+    
+        
 
         //add spider
         let spider = this.add.sprite(-400, 50, 'spiderRun').setOrigin(0, 0);
@@ -62,18 +69,25 @@ class Play extends Phaser.Scene {
         this.lab.tilePositionX += 15;
 
         this.scientist.update();
-       
-        // check collisions
-        /*
-        if(this.checkCollision(this.p1Rocket, this.ship03)) {
+        // running
+        if(!this.scientist.isRunning) {
+            if(keyA.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
+                this.scientist.x -= this.scientist.moveSpeed;
+            } else if (keyD.isDown && this.scientist.x <= game.config.width - borderUISize - this.scientist.width) {
+                this.scientist.x += this.scientist.moveSpeed;
+            }
         }
+    
+        // jumping
+        if(!this.scientist.isJumping && !this.scientist.isSliding){
+            if(Phaser.Input.Keyboard.JustDown(keyW)){   
+                this.scientistisJumping = true;
+                this.scientist.body.setVelocityY(-300);
 
-        if (this.checkCollision(this.p1Rocket, this.ship02)) {
+
+            }
         }
-          
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
-        }
-        */
+        
     }
 
 }

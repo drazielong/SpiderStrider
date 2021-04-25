@@ -9,7 +9,7 @@ class Runner extends Phaser.GameObjects.Sprite{
         this.moveSpeed = 7;
         this.isJumping = false;
         this.isSliding = false;
-        //this.setGravityY(300);
+    
     }
 
     update(){
@@ -26,11 +26,11 @@ class Runner extends Phaser.GameObjects.Sprite{
         if(!this.isJumping && !this.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.isJumping = true;
-                this.setVelocity(0,-300)
+                this.body.setVelocityY(-300);
 
 
             }
-
+            
         }
     }
 }
