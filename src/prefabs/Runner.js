@@ -4,21 +4,33 @@ class Runner extends Phaser.GameObjects.Sprite{
    
         // add object to existing scene
         scene.add.existing(this);
-        this.isRunning = False;
-        this.isJumping = False;
-        this.isSliding = False;
-        this.setGravityY(300);
+
+        this.isRunning = false;
+        this.moveSpeed = 7;
+        this.isJumping = false;
+        this.isSliding = false;
+        //this.setGravityY(300);
     }
+
     update(){
+        // running
+        if(!this.isRunning) {
+            if(keyA.isDown && this.x >= borderUISize + this.width) {
+                this.x -= this.moveSpeed;
+            } else if (keyD.isDown && this.x <= game.config.width - borderUISize - this.width) {
+                this.x += this.moveSpeed;
+            }
+        }
+    
+        // jumping
         if(!this.isJumping && !this.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
-                this.isJumping = True;
-                this.setVelocityY(-300);
+                this.isJumping = true;
+                this.setVelocity(0,-300)
 
 
             }
 
         }
-
     }
 }

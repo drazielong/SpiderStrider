@@ -6,6 +6,7 @@ class Menu extends Phaser.Scene {
     preload(){
         // load assets
         this.load.image('menu', './assets/menu.png');
+        this.load.image('scientist', './assets/sci1.png');
     }
 
     create() {
@@ -19,7 +20,7 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
           // Novice mode
           game.settings = {
-            gameTimer: 60000    
+            //gameTimer: 60000    
           }
           //this.sound.play('sfx_beep');  
           this.scene.start("playScene");  
