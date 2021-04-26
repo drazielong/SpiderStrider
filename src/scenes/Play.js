@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
     create() {
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
+        
 
         // borders
         /*
@@ -48,7 +49,8 @@ class Play extends Phaser.Scene {
         this.scientist.moveSpeed = 7;
         this.scientist.isJumping = false;
         this.scientist.isSliding = false;
-    
+        this.scientist.setCollideWorldBounds(true);
+        //this.scientist.onWorldBounds = true;
         
 
         //add spider
@@ -82,7 +84,8 @@ class Play extends Phaser.Scene {
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.scientistisJumping = true;
-                this.scientist.body.setVelocityY(-300);
+                this.scientist.body.setVelocityY(-100);
+                
 
 
             }
