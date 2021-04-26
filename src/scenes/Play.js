@@ -43,7 +43,9 @@ class Play extends Phaser.Scene {
 
         // add player
         //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
-        this.scientist = this.physics.add.sprite(400, 200, 'platformer_atlas','run').setOrigin(0.5,0);
+        this.scientist = this.physics.add.sprite(400, 200, 'spiderRun','run').setOrigin(0.5,0);
+        this.scientist.setSize(200,250);
+        this.scientist.setOffset(50,10);
         this.scientist.anims.play('run');
         this.scientist.isRunning = false;
         this.scientist.moveSpeed = 7;
