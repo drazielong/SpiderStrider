@@ -45,7 +45,13 @@ class Play extends Phaser.Scene {
 
         // add player
         //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
+<<<<<<< HEAD
         this.scientist = this.physics.add.sprite(400, 200, 'platformer_atlas','run').setOrigin(0.5, 0);
+=======
+        this.scientist = this.physics.add.sprite(400, 200, 'spiderRun','run').setOrigin(0.5,0);
+        this.scientist.setSize(200,250);
+        this.scientist.setOffset(50,10);
+>>>>>>> b0ac3528e5e87864d0754e8655eca2ed3584165e
         this.scientist.anims.play('run');
         this.scientist.isRunning = false;
         this.scientist.moveSpeed = 7;
@@ -87,7 +93,14 @@ class Play extends Phaser.Scene {
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.scientistisJumping = true;
+<<<<<<< HEAD
                 this.scientist.body.setVelocityY(-100);
+=======
+                this.scientist.body.setVelocityY(-200);
+                
+
+
+>>>>>>> b0ac3528e5e87864d0754e8655eca2ed3584165e
             }
         } 
     }
