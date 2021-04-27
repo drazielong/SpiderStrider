@@ -1,15 +1,15 @@
-class Menu extends Phaser.Scene {
+class Warning extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("warningScene");
     }
 
     preload(){
         // load assets
-        this.load.image('menu', './assets/menu.png');
+        this.load.image('cw', './assets/cw.png');
     }
 
     create() {
-        this.title = this.add.tileSprite(0, 0, 3840, 480, 'menu').setOrigin(0, 0);
+        this.title = this.add.tileSprite(0, 0, 3840, 480, 'cw').setOrigin(0, 0);
 
         // define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -22,7 +22,7 @@ class Menu extends Phaser.Scene {
             //gameTimer: 60000    
           }
           //this.sound.play('sfx_beep');  
-          this.scene.start("playScene");  
+          this.scene.start("menuScene");  
         }
       }
 }
