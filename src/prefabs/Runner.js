@@ -27,10 +27,7 @@ class Runner extends Phaser.GameObjects.Sprite{
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.isJumping = true;
                 this.body.setVelocityY(-300);
-
-
             }
-            
         }
     }
 }
