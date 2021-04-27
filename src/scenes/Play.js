@@ -6,9 +6,12 @@ class Play extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
+        this.load.image('body', './assets/body.png');
+        this.load.image('mummy', './assets/mummy.png');
         
         // load spritesheet
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
+        this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 2});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
     }
 
@@ -30,6 +33,14 @@ class Play extends Phaser.Scene {
             key: 'run',
             frames: this.anims.generateFrameNumbers('run', { start: 0, end: 10, first: 0}),
             frameRate: 20,
+            repeat: -1
+        });
+
+        // animation config
+        this.anims.create({
+            key: 'jump',
+            frames: this.anims.generateFrameNumbers('jump', { start: 0, end: 2, first: 0}),
+            frameRate: 10,
             repeat: -1
         });
 
@@ -59,6 +70,7 @@ class Play extends Phaser.Scene {
         spider.anims.play('spiderRun');
 
         //if player hits an obstacle, set spider's X to -300 :)
+        // ^should be in update
 
         // define keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -66,6 +78,10 @@ class Play extends Phaser.Scene {
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
+        // add obstacles
+        this.ob01 = new Obstacles(this, game.config.width + 10, 130, 'body', 0).setOrigin(0, 0);
+        this.ob02 = new Obstacles(this, game.config.width + 10, 130, 'mummy', 0).setOrigin(0,0);
+    
         // GAME OVER flag
         this.gameOver = false;
     }
@@ -75,6 +91,8 @@ class Play extends Phaser.Scene {
         this.lab.tilePositionX += 15;
 
         this.scientist.update();
+        //this.ob01.update();
+        this.ob02.update();
 
         // running
         /*
@@ -92,7 +110,31 @@ class Play extends Phaser.Scene {
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.scientistisJumping = true;
                 this.scientist.body.setVelocityY(-200);
+                this.scientist.anims.play('jump');
             }
         } 
+
+        // check collisions
+        if(this.checkCollision(this.scientist, this.ob01)) {
+            // end game
+
+        }
+        if (this.checkCollision(this.scientist, this.ob02)) {
+            // end game
+            //this.gameOver = true;
+            //this.scene.start("endScene");  
+        }
+    }
+
+    checkCollision(scientist, ob) {
+        // simple AABB checking
+        if (scientist.x < ob.x + ob.width && 
+            scientist.x + scientist.width > ob.x && 
+            scientist.y < ob.y + ob.height &&
+            scientist.height + scientist.y > ob. y) {
+                return true;
+        } else {
+            return false;
+        }
     }
 }

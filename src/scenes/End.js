@@ -5,7 +5,7 @@ class End extends Phaser.Scene {
 
     preload(){
         // load assets
-        this.load.image('menu', './assets/menu.png');
+        this.load.image('end', './assets/end.png');
     }
 
     create() {
@@ -22,7 +22,6 @@ class End extends Phaser.Scene {
             //gameTimer: 60000    
           }
           //this.sound.play('sfx_beep');  
-          this.scene.start("playScene");  
         }
       }
 }
