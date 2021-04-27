@@ -9,7 +9,7 @@ class Runner extends Phaser.GameObjects.Sprite{
         this.moveSpeed = 7;
         this.isJumping = false;
         this.isSliding = false;
-    
+        
     }
 
     update(){

@@ -8,8 +8,7 @@ class Play extends Phaser.Scene {
         this.load.image('lab', './assets/lab.png');
         
         // load spritesheet
-        //this.load.spritesheet('run', './assets/running.png', {frameWidth: 730, frameHeight: 160, startFrame: 0, endFrame: 6});
-        this.load.spritesheet('run', './assets/run.png', {frameWidth: 264, frameHeight: 280, startFrame: 0, endFrame: 1});
+        this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
     }
 
@@ -17,7 +16,6 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
         
-
         // borders
         /*
         // right border isn't showing up; not sure if we even want borders
@@ -30,9 +28,8 @@ class Play extends Phaser.Scene {
         // animation config
         this.anims.create({
             key: 'run',
-            frames: this.anims.generateFrameNumbers('run', { start: 0, end: 1, first: 0}),
-            //frames: this.anims.generateFrameNumbers('run', { start: 0, end: 6, first: 0}),
-            frameRate: 5,
+            frames: this.anims.generateFrameNumbers('run', { start: 0, end: 10, first: 0}),
+            frameRate: 20,
             repeat: -1
         });
 
@@ -45,13 +42,10 @@ class Play extends Phaser.Scene {
 
         // add player
         //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
-<<<<<<< HEAD
         this.scientist = this.physics.add.sprite(400, 200, 'platformer_atlas','run').setOrigin(0.5, 0);
-=======
         this.scientist = this.physics.add.sprite(400, 200, 'spiderRun','run').setOrigin(0.5,0);
         this.scientist.setSize(200,250);
-        this.scientist.setOffset(50,10);
->>>>>>> b0ac3528e5e87864d0754e8655eca2ed3584165e
+        this.scientist.setOffset(10,10);
         this.scientist.anims.play('run');
         this.scientist.isRunning = false;
         this.scientist.moveSpeed = 7;
@@ -60,7 +54,6 @@ class Play extends Phaser.Scene {
         this.scientist.setCollideWorldBounds(true);
         //this.scientist.onWorldBounds = true;
         
-
         //add spider
         let spider = this.add.sprite(-400, 50, 'spiderRun').setOrigin(0, 0);
         spider.anims.play('spiderRun');
@@ -81,6 +74,7 @@ class Play extends Phaser.Scene {
         this.scientist.update();
 
         // running
+        /*
         if(!this.scientist.isRunning) {
             if(keyA.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
                 this.scientist.x -= this.scientist.moveSpeed;
@@ -88,19 +82,13 @@ class Play extends Phaser.Scene {
                 this.scientist.x += this.scientist.moveSpeed;
             }
         }
+        */
     
         // jumping
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.scientistisJumping = true;
-<<<<<<< HEAD
-                this.scientist.body.setVelocityY(-100);
-=======
                 this.scientist.body.setVelocityY(-200);
-                
-
-
->>>>>>> b0ac3528e5e87864d0754e8655eca2ed3584165e
             }
         } 
     }
