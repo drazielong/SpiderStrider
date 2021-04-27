@@ -86,7 +86,7 @@ class Play extends Phaser.Scene {
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
                 this.scientistisJumping = true;
-                this.scientist.body.setVelocityY(-100);
+                this.scientist.body.setVelocityY(-200);
                 
 
 
