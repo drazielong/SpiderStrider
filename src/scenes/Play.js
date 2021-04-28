@@ -8,11 +8,12 @@ class Play extends Phaser.Scene {
         this.load.image('lab', './assets/lab.png');
         this.load.image('body', './assets/body.png');
         this.load.image('mummy', './assets/mummy.png');
-        
+        this.load.spritesheet('slide', './assets/slide.png',{frameWidth: 280, frameHeight: 140, startFrame: 3, endFrame: 3});
         // load spritesheet
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 2});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
+
     }
 
     create() {
@@ -53,7 +54,6 @@ class Play extends Phaser.Scene {
 
         // add player
         //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
-        this.scientist = this.physics.add.sprite(400, 200, 'platformer_atlas','run').setOrigin(0.5, 0);
         this.scientist = this.physics.add.sprite(400, 200, 'spiderRun','run').setOrigin(0.5,0);
         this.scientist.setSize(200,250);
         this.scientist.setOffset(10,10);
@@ -108,11 +108,19 @@ class Play extends Phaser.Scene {
         // jumping
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(Phaser.Input.Keyboard.JustDown(keyW)){   
-                this.scientistisJumping = true;
+                this.scientist.isJumping = true;
                 this.scientist.body.setVelocityY(-200);
                 this.scientist.anims.play('jump');
             }
         } 
+
+        if(!this.scientist.isJumping && !this.scientist.isSliding){
+            if(keyS.isDown){
+                this.scientist.isSliding = true;
+                this.scientist.anims.play('slide');
+            }
+        }
+
 
         // check collisions
         if(this.checkCollision(this.scientist, this.ob01)) {
