@@ -12,7 +12,7 @@ class Play extends Phaser.Scene {
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 140, startFrame: 0, endFrame: 3});
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
-        this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 10});
+        this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
 
     }
@@ -42,12 +42,10 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
 
-        // animation config
         this.anims.create({
             key: 'jump',
             frames: this.anims.generateFrameNumbers('jump', { start: 0, end: 10, first: 0}),
             frameRate: 10,
-            repeat: -1
         });
 
         this.anims.create({
@@ -65,7 +63,6 @@ class Play extends Phaser.Scene {
         });
 
         // add player
-        //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
         this.scientist = this.physics.add.sprite(400, 200,'run').setOrigin(0.25,0);
         this.scientist.setSize(200,250);
         this.scientist.setOffset(10,10);
@@ -102,8 +99,6 @@ class Play extends Phaser.Scene {
 
         // makes background scroll
         this.lab.tilePositionX += 15;
-
-        
         
         //this.ob01.update();
         //this.ob02.update();
@@ -134,9 +129,7 @@ class Play extends Phaser.Scene {
                 this.scientist.isJumping = true; 
                 this.scientist.body.setVelocityY(-200);
                 this.scientist.anims.play('jump');
-
             }
-            //on landing: slide = false, run = true
         } 
 
         //sliding
@@ -147,8 +140,9 @@ class Play extends Phaser.Scene {
                 this.scientist.setSize(200, 125);
                 this.scientist.setOffset(0, 125);
                 this.scientist.anims.play('slide');
+
+                //on key up: slide = false, run = true
             }
-            //on key up: slide = false, run = true
         }
 
         /*
@@ -173,13 +167,19 @@ class Play extends Phaser.Scene {
             // move scientist to (.5, 0)
             this.timesHit++;
         }
+
         if (this.physics.collide(this.scientist, this.ob02)) {
             //if player hits an obstacle once, set spider's X to -300
             this.timesHit++;
         }
+
         if (this.scientist.body.blocked.down){
             this.scientist.isRunning = true;
+            if (this.scientist.isJumping == true) {
+                this.scientist.isJumping = false;
+            }
         }
+
         if (this.timesHit >= 2){
             //end game
             //this.gameOver = true;
