@@ -124,7 +124,7 @@ class Play extends Phaser.Scene {
         if(this.scientist.isRunning){
             this.scientist.setSize(200,250);
             this.scientist.setOffset(10,10);
-            this.scientist.anims.play('run');
+            this.scientist.anims.play('run', true);
         }
     
         // jumping
@@ -177,7 +177,9 @@ class Play extends Phaser.Scene {
             //if player hits an obstacle once, set spider's X to -300
             this.timesHit++;
         }
-
+        if (this.scientist.body.blocked.down){
+            this.scientist.isRunning = true;
+        }
         if (this.timesHit >= 2){
             //end game
             //this.gameOver = true;
