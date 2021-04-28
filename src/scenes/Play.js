@@ -8,8 +8,7 @@ class Play extends Phaser.Scene {
         this.load.image('lab', './assets/lab.png');
         this.load.image('body', './assets/body.png');
         this.load.image('mummy', './assets/mummy.png');
-        this.load.spritesheet('slide', './assets/slide.png',{frameWidth: 280, frameHeight: 140, startFrame: 3, endFrame: 3});
-        // load spritesheet
+        this.load.spritesheet('slide', './assets/slide.png', {frameWidth: 280, frameHeight: 280, startFrame: 2, endFrame: 2});
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 2});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
@@ -46,6 +45,13 @@ class Play extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'slide',
+            frames: this.anims.generateFrameNumbers('slide', { start: 2, end: 2, first: 2}),
+            frameRate: 20,
+            repeat: -1
+        });
+
+        this.anims.create({
             key: 'spiderRun',
             frames: this.anims.generateFrameNumbers('spiderRun', { start: 0, end: 7, first: 0}),
             frameRate: 12,
@@ -54,7 +60,7 @@ class Play extends Phaser.Scene {
 
         // add player
         //this.scientist = new Runner(this, 400, 200, 'run').setOrigin(0.5, 0);
-        this.scientist = this.physics.add.sprite(400, 200, 'spiderRun','run').setOrigin(0.5,0);
+        this.scientist = this.physics.add.sprite(400, 200,'run').setOrigin(0.5,0);
         this.scientist.setSize(200,250);
         this.scientist.setOffset(10,10);
         this.scientist.anims.play('run');
@@ -69,9 +75,6 @@ class Play extends Phaser.Scene {
         let spider = this.add.sprite(-400, 50, 'spiderRun').setOrigin(0, 0);
         spider.anims.play('spiderRun');
 
-        //if player hits an obstacle, set spider's X to -300 :)
-        // ^should be in update
-
         // define keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -84,6 +87,8 @@ class Play extends Phaser.Scene {
     
         // GAME OVER flag
         this.gameOver = false;
+
+        this.timesHit = 0; //two hits = gameOver
     }
 
     update() {
@@ -107,32 +112,52 @@ class Play extends Phaser.Scene {
     
         // jumping
         if(!this.scientist.isJumping && !this.scientist.isSliding){
-            if(Phaser.Input.Keyboard.JustDown(keyW)){   
-                this.scientist.isJumping = true;
+            if(Phaser.Input.Keyboard.JustDown(keyW)){  
+                this.scientist.isJumping = true; 
+                this.scientist.isRunning = false;
                 this.scientist.body.setVelocityY(-200);
                 this.scientist.anims.play('jump');
             }
+            //on landing: slide = false, run = true
         } 
 
+        //sliding
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(keyS.isDown){
                 this.scientist.isSliding = true;
+                this.scientist.isRunning = false;
+                this.scientist.setSize(200, 125);
+                this.scientist.setOffset(0, 125);
                 this.scientist.anims.play('slide');
             }
+            //on key up: slide = false, run = true
+        }
+
+        //running
+        if(this.scientist.isRunning){
+            this.scientist.setSize(200,250);
+            this.scientist.setOffset(10,10);
+            this.scientist.anims.play('run');
         }
 
 
         // check collisions
         if(this.checkCollision(this.scientist, this.ob01)) {
-            // end game
-
+            //if player hits an obstacle once, set spider's X to -300
+            this.timesHit++;
         }
         if (this.checkCollision(this.scientist, this.ob02)) {
-            // end game
+            //if player hits an obstacle once, set spider's X to -300
+            this.timesHit++;
+        }
+
+        if (this.timesHit >= 2){
+            //end game
             //this.gameOver = true;
-            //this.scene.start("endScene");  
+            //this.scene.start("endScene"); 
         }
     }
+
 
     checkCollision(scientist, ob) {
         // simple AABB checking
