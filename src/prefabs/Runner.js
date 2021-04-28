@@ -31,3 +31,5 @@ class Runner extends Phaser.GameObjects.Sprite{
         }
     }
 }
+
+//hide scientist, play animation, reposition scientist
