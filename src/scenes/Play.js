@@ -103,7 +103,7 @@ class Play extends Phaser.Scene {
         // makes background scroll
         this.lab.tilePositionX += 15;
 
-        this.scientist.update();
+        
         
         //this.ob01.update();
         //this.ob02.update();
@@ -124,7 +124,6 @@ class Play extends Phaser.Scene {
         if(this.scientist.isRunning){
             this.scientist.setSize(200,250);
             this.scientist.setOffset(10,10);
-            this.scientist.isRunning = true;
             this.scientist.anims.play('run');
         }
     
@@ -169,12 +168,12 @@ class Play extends Phaser.Scene {
         */
 
         // check collisions
-        if(this.checkCollision(this.scientist, this.ob01)) {
+        if(this.physics.collide(this.scientist, this.ob01)) {
             // if player hits an obstacle once, set spider's X to -300
             // move scientist to (.5, 0)
             this.timesHit++;
         }
-        if (this.checkCollision(this.scientist, this.ob02)) {
+        if (this.physics.collide(this.scientist, this.ob02)) {
             //if player hits an obstacle once, set spider's X to -300
             this.timesHit++;
         }
@@ -187,16 +186,6 @@ class Play extends Phaser.Scene {
     }
         
 
-    checkCollision(scientist, ob) {
-        // simple AABB checking
-        if (scientist.x < ob.x + ob.width && 
-            scientist.x + scientist.width > ob.x && 
-            scientist.y < ob.y + ob.height &&
-            scientist.height + scientist.y > ob. y) {
-                return true;
-        } else {
-            return false;
-        }
-    }
+    
 
 }
