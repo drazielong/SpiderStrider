@@ -99,7 +99,6 @@ class Play extends Phaser.Scene {
 
         // makes background scroll
         this.lab.tilePositionX += 15;
-<<<<<<< HEAD
 
         this.scientist.update();
 
@@ -108,14 +107,11 @@ class Play extends Phaser.Scene {
         this.scientist.isSliding = false;
         this.scientist.setSize(200,250);
         this.scientist.setOffset(10,10);
-=======
->>>>>>> abc8a162ca854de2892f5ec3143160b8b4bf1ea4
         
         this.ob01.update();
         //this.ob02.update();
 
         // running
-        
         if(!this.scientist.isRunning) {
             if(keyD.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
                 //this.scientist.x += this.scientist.moveSpeed;
@@ -145,11 +141,6 @@ class Play extends Phaser.Scene {
             this.scientist.anims.play('jump');
         }
 
-<<<<<<< HEAD
-            }
-            //on landing: slide = false, run = true
-        } 
-
         //sliding
         if(!this.scientist.isJumping && !this.scientist.isSliding){
             if(keyS.isDown){
@@ -160,12 +151,6 @@ class Play extends Phaser.Scene {
                 this.scientist.anims.play('slide');
             }
             //on key up: slide = false, run = true
-=======
-        //reset to run on landing
-        if (this.scientist.isJumping && this.scientist.body.blocked.down && this.scientist.anims.currentFrame.isLast){
-            this.scientist.isJumping = false;
-            this.scientist.isRunning = true;
->>>>>>> abc8a162ca854de2892f5ec3143160b8b4bf1ea4
         }
 
         //sliding conditions
