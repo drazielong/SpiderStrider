@@ -111,6 +111,10 @@ class Play extends Phaser.Scene {
         this.ob01.update();
         //this.ob02.update();
 
+        // randomly get number
+        // assign each obstacle to a number
+        // if number then update obstacle
+
         // running
         if(!this.scientist.isRunning) {
             if(keyD.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
