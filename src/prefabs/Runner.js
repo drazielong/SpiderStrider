@@ -5,11 +5,10 @@ class Runner extends Phaser.GameObjects.Sprite{
         // add object to existing scene
         scene.add.existing(this);
 
-        this.isRunning = false;
         this.moveSpeed = 7;
+        this.isRunning = false;
         this.isJumping = false;
         this.isSliding = false;
-        
     }
 
     update(){
@@ -31,5 +30,3 @@ class Runner extends Phaser.GameObjects.Sprite{
         }
     }
 }
-
-//hide scientist, play animation, reposition scientist

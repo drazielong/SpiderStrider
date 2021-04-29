@@ -23,7 +23,7 @@ class Play extends Phaser.Scene {
         
         // add obstacles
         this.ob01 = new Obstacles(this, game.config.width + 10, 130, 'body', 0).setOrigin(0, 0);
-        this.ob02 = new Obstacles(this, game.config.width + 10, 130, 'mummy', 0).setOrigin(0,0);
+        this.ob02 = new Obstacles(this, game.config.width + 10, 185, 'mummy', 0).setOrigin(0, 0);
 
         // borders
         /*
@@ -104,22 +104,32 @@ class Play extends Phaser.Scene {
         this.lab.tilePositionX += 15;
 
         this.scientist.update();
+
+        this.scientist.isRunning = false;
+        this.scientist.isJumping = false;
+        this.scientist.isSliding = false;
+        this.scientist.setSize(200,250);
+        this.scientist.setOffset(10,10);
         
-        //this.ob01.update();
+        this.ob01.update();
         //this.ob02.update();
 
 
         // running
-        /*
+        
         if(!this.scientist.isRunning) {
-            if(keyA.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
+            if(keyD.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
+                //this.scientist.x += this.scientist.moveSpeed;
+                this.scientist.setSize(200,250);
+                this.scientist.setOffset(10,10);
+                this.scientist.isRunning = true;
+                this.scientist.anims.play('run');
+            } /*else if (keyA.isDown && this.scientist.x <= game.config.width - borderUISize - this.scientist.width) {
                 this.scientist.x -= this.scientist.moveSpeed;
-            } else if (keyD.isDown && this.scientist.x <= game.config.width - borderUISize - this.scientist.width) {
-                this.scientist.x += this.scientist.moveSpeed;
-            }
+            }*/
         }
-        */
-
+        
+        /*
         //running
         if(this.scientist.isRunning){
             this.scientist.setSize(200,250);
@@ -127,6 +137,7 @@ class Play extends Phaser.Scene {
             this.scientist.isRunning = true;
             this.scientist.anims.play('run');
         }
+        */
     
         // jumping
         if(!this.scientist.isJumping && !this.scientist.isSliding){
@@ -146,7 +157,7 @@ class Play extends Phaser.Scene {
                 this.scientist.isRunning = false;
                 this.scientist.isSliding = true;
                 this.scientist.setSize(200, 125);
-                this.scientist.setOffset(0, 125);
+                this.scientist.setOffset(0, 20);
                 this.scientist.anims.play('slide');
             }
             //on key up: slide = false, run = true
