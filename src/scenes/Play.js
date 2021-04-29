@@ -10,7 +10,7 @@ class Play extends Phaser.Scene {
         this.load.image('mummy', './assets/mummy.png');
 
         // spritesheets
-        this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 140, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
@@ -51,7 +51,7 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'slide',
             frames: this.anims.generateFrameNumbers('slide', { start: 0, end: 3, first: 0}),
-            frameRate: 20,
+            frameRate: 10,
             repeat: -1
         });
 
@@ -63,9 +63,9 @@ class Play extends Phaser.Scene {
         });
 
         // add player
-        this.scientist = this.physics.add.sprite(400, 200,'run').setOrigin(0.25,0);
-        this.scientist.setSize(200,250);
-        this.scientist.setOffset(10,10);
+        this.scientist = this.physics.add.sprite(400, 480,'run').setOrigin(0.25, 0);
+        this.scientist.setSize(200,280);
+        this.scientist.setOffset(20, 0);
         this.scientist.anims.play('run');
         this.scientist.isRunning = false;
         this.scientist.moveSpeed = 7;
@@ -103,7 +103,6 @@ class Play extends Phaser.Scene {
         //this.ob01.update();
         //this.ob02.update();
 
-
         // running
         /*
         if(!this.scientist.isRunning) {
@@ -117,49 +116,44 @@ class Play extends Phaser.Scene {
 
         //running
         if(this.scientist.isRunning){
-            this.scientist.setSize(200,250);
-            this.scientist.setOffset(10,10);
+            this.scientist.setSize(200,280);
+            this.scientist.setOffset(20, 20);   
             this.scientist.anims.play('run', true);
         }
     
-        // jumping
-        if(!this.scientist.isJumping && !this.scientist.isSliding){
-            if(Phaser.Input.Keyboard.JustDown(keyW)){  
-                this.scientist.isRunning = false;
-                this.scientist.isJumping = true; 
-                this.scientist.body.setVelocityY(-200);
-                this.scientist.anims.play('jump');
-            }
-        } 
-
-        //sliding
-        if(!this.scientist.isJumping && !this.scientist.isSliding){
-            if(keyS.isDown){
-                this.scientist.isRunning = false;
-                this.scientist.isSliding = true;
-                this.scientist.setSize(200, 125);
-                this.scientist.setOffset(0, 125);
-                this.scientist.anims.play('slide');
-
-                //on key up: slide = false, run = true
-            }
-        }
-
-        /*
-        if(Phaser.Input.Keyboard.JustDown(keyW))
-        {   
+        // jumping       
+        if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down){ 
+            this.scientist.isRunning = false;
+            this.scientist.isJumping = true;
+            this.scientist.body.setVelocityY(-200);
             this.scientist.anims.play('jump');
-            console.log("1");
-        } else if (Phaser.Input.Keyboard.JustDown(keyS)) {    
-            //this.sprite.body.velocity.x = -this.maxVelocityX;     
-            this.scientist.anims.play('slide');
-            console.log("2");
-            //this.facing = 'left';
-        } else {      
-            this.scientist.anims.play('run');
-            console.log("3");
         }
-        */
+
+        //reset to run on landing
+        if (this.scientist.isJumping && this.scientist.body.blocked.down && this.scientist.anims.currentFrame.isLast){
+            this.scientist.isJumping = false;
+            this.scientist.isRunning = true;
+        }
+
+        //sliding conditions
+        if(!this.scientist.isJumping && !this.scientist.isSliding && this.scientist.body.blocked.down && keyS.isDown){
+            this.scientist.isSliding = true;
+            this.scientist.isRunning = false;
+        }
+        else if(keyS.isUp && !this.scientist.isJumping){
+            this.scientist.isSliding = false;
+            this.scientist.isRunning = true;
+        }
+
+        //if all above is satisfied, you're allowed to slide :)    
+        if(this.scientist.isSliding){
+            this.scientist.isRunning = false;
+            this.scientist.setSize(200, 125);
+            this.scientist.setOffset(0, 175);
+            //this is just a single image since the anim will replay as long as you hold the S button
+            //If we want the sliding animations to play later, I can do what i did for the jumping anim but slightly different
+            this.scientist.anims.play('slide'); 
+        }
 
         // check collisions
         if(this.physics.collide(this.scientist, this.ob01)) {
@@ -173,21 +167,10 @@ class Play extends Phaser.Scene {
             this.timesHit++;
         }
 
-        if (this.scientist.body.blocked.down){
-            this.scientist.isRunning = true;
-            if (this.scientist.isJumping == true) {
-                this.scientist.isJumping = false;
-            }
-        }
-
         if (this.timesHit >= 2){
             //end game
             //this.gameOver = true;
             //this.scene.start("endScene"); 
         }
     }
-        
-
-    
-
 }
