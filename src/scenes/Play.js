@@ -6,24 +6,28 @@ class Play extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
+        this.load.image('vignette', './assets/vignette.png');
         this.load.image('body', './assets/body.png');
         this.load.image('mummy', './assets/mummy.png');
+        this.load.image('light', './assets/light.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
-
     }
 
     create() {
         // place tile sprite
+        //this.vignette = this.add.tileSprite(0, 0, 1715, 480, 'vignette').setOrigin(0, 0); 
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
+        this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
         
         // add obstacles
-        this.ob01 = new Obstacles(this, game.config.width + 10, 130, 'body', 0).setOrigin(0, 0);
-        this.ob02 = new Obstacles(this, game.config.width + 10, 130, 'mummy', 0).setOrigin(0,0);
+        this.ob01 = new Obstacles(this, game.config.width + 10, 320, 'body', 0).setOrigin(0, 0);
+        this.ob02 = new Obstacles(this, game.config.width + 10, 250, 'mummy', 0).setOrigin(0,0);
+        this.ob03 = new Obstacles(this, game.config.width + 10, 10, 'light', 0).setOrigin(0,0);
 
         // borders
         /*
@@ -97,11 +101,29 @@ class Play extends Phaser.Scene {
             this.scene.restart();
         }
 
-        // makes background scroll
+        // makes background scroll 
         this.lab.tilePositionX += 15;
         
         //this.ob01.update();
-        //this.ob02.update();
+        //this.ob03.update();
+
+        var value = Phaser.Math.Between(1, 4);
+
+        if(value == 1){
+            console.log("1");
+            this.ob01.update();
+        } 
+        if (value == 2) {
+            console.log("2");
+            this.ob02.update();
+        } 
+        if (value == 2) {
+            console.log("3");
+            this.ob03.update();
+        } 
+        if (value == 4) {
+            console.log("4");
+        }
 
         // running
         /*
@@ -122,7 +144,7 @@ class Play extends Phaser.Scene {
         }
     
         // jumping       
-        if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down){ 
+        if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
             this.scientist.body.setVelocityY(-200);
