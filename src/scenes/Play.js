@@ -19,15 +19,18 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
         this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
         
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
         this.ob01 = new Obstacles(this, game.config.width + 10, 320, 'body', 0).setOrigin(0, 0);
         this.ob02 = new Obstacles(this, game.config.width + 10, 250, 'mummy', 0).setOrigin(0,0);
         this.ob03 = new Obstacles(this, game.config.width + 10, 10, 'light', 0).setOrigin(0,0);
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config
         this.anims.create({
             key: 'run',
@@ -56,6 +59,7 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add player
         this.scientist = this.physics.add.sprite(400, 480,'run').setOrigin(0.25, 0);
         this.scientist.setSize(200,280);
@@ -72,6 +76,7 @@ class Play extends Phaser.Scene {
         let spider = this.add.sprite(-400, 50, 'spiderRun').setOrigin(0, 0);
         spider.anims.play('spiderRun');
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // define keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -79,11 +84,13 @@ class Play extends Phaser.Scene {
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     
-        // GAME OVER flag
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // GAME OVER
         this.gameOver = false;
 
         this.timesHit = 0; //two hits = gameOver
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
         this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
@@ -99,17 +106,20 @@ class Play extends Phaser.Scene {
 
         // makes background scroll 
         this.lab.tilePositionX += 15;
-        
-        //this.ob01.update();
-        //this.ob03.update();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // obstacles
 
         var value = Phaser.Math.Between(1, 4);
 
         /*
+        // while !(obj.position is on screen)
+
         // dead body
         if(value == 1){
             console.log("1");
             this.ob01.update();
+
         } 
         // mummy
         if (value == 2) {
@@ -123,16 +133,8 @@ class Play extends Phaser.Scene {
         } 
         */
 
-        // running
-        /*
-        if(!this.scientist.isRunning) {
-            if(keyA.isDown && this.scientist.x >= borderUISize + this.scientist.width) {
-                this.scientist.x -= this.scientist.moveSpeed;
-            } else if (keyD.isDown && this.scientist.x <= game.config.width - borderUISize - this.scientist.width) {
-                this.scientist.x += this.scientist.moveSpeed;
-            }
-        }
-        */
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // movement
 
         //running
         if(this.scientist.isRunning){
@@ -175,6 +177,7 @@ class Play extends Phaser.Scene {
             this.scientist.anims.play('slide'); 
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions
         if(this.physics.collide(this.scientist, this.ob01)) {
             // if player hits an obstacle once, set spider's X to -300
@@ -187,9 +190,14 @@ class Play extends Phaser.Scene {
             this.timesHit++;
         }
 
+        if (this.physics.collide(this.scientist, this.ob03)) {
+            //if player hits an obstacle once, set spider's X to -300
+            this.timesHit++;
+        }
+
         if (this.timesHit >= 2){
             //end game
-            //this.gameOver = true;
+            this.gameOver = true;
             //this.scene.start("endScene"); 
         }
     }

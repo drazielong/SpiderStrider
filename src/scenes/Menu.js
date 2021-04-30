@@ -13,16 +13,26 @@ class Menu extends Phaser.Scene {
 
         // define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
           // Novice mode
           game.settings = {
-            //gameTimer: 60000    
+              //gameTimer: 60000    
           }
           //this.sound.play('sfx_beep');  
           this.scene.start("playScene");  
         }
+
+        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            // Novice mode
+            game.settings = {
+              //gameTimer: 60000    
+            }
+            //this.sound.play('sfx_beep');  
+            this.scene.start("hardScene");  
+          }
       }
 }
