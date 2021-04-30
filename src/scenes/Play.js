@@ -20,7 +20,6 @@ class Play extends Phaser.Scene {
 
     create() {
         // place tile sprite
-        //this.vignette = this.add.tileSprite(0, 0, 1715, 480, 'vignette').setOrigin(0, 0); 
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
         this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
         
@@ -28,15 +27,6 @@ class Play extends Phaser.Scene {
         this.ob01 = new Obstacles(this, game.config.width + 10, 320, 'body', 0).setOrigin(0, 0);
         this.ob02 = new Obstacles(this, game.config.width + 10, 250, 'mummy', 0).setOrigin(0,0);
         this.ob03 = new Obstacles(this, game.config.width + 10, 10, 'light', 0).setOrigin(0,0);
-
-        // borders
-        /*
-        // right border isn't showing up; not sure if we even want borders
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0x5e5e5e).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x5e5e5e).setOrigin(0, 0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0x5e5e5e).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - borderUISize, 0, 0x5e5e5e, game.config.height, 0x000000).setOrigin(0, 0);
-        */
 
         // animation config
         this.anims.create({
@@ -93,6 +83,12 @@ class Play extends Phaser.Scene {
         this.gameOver = false;
 
         this.timesHit = 0; //two hits = gameOver
+
+        // borders
+        this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
+        this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
+        this.add.rectangle(0, 0, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
+        this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
     }
 
     update() {
@@ -109,21 +105,23 @@ class Play extends Phaser.Scene {
 
         var value = Phaser.Math.Between(1, 4);
 
+        /*
+        // dead body
         if(value == 1){
             console.log("1");
             this.ob01.update();
         } 
+        // mummy
         if (value == 2) {
             console.log("2");
             this.ob02.update();
         } 
+        // light
         if (value == 2) {
             console.log("3");
             this.ob03.update();
         } 
-        if (value == 4) {
-            console.log("4");
-        }
+        */
 
         // running
         /*
