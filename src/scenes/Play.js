@@ -6,7 +6,7 @@ class Play extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
-        this.load.image('floor', './assets/floor.png');
+        this.load.image('pH', './assets/placeHolder.png');
         this.load.image('vignette', './assets/vignette.png');
         this.load.image('ob01', './assets/body.png');
         this.load.image('ob02', './assets/mummy.png');
@@ -24,6 +24,12 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
         this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
+
+        // this acts as an invisible box so that the player doesnt get pushed off screen
+        this.pH = this.physics.add.image(-100, 470, 'pH').setOrigin(0,0);
+        this.pH.setSize(370, 81, true);
+        this.pH.setOffset(120, 0);
+        this.pH.setCollideWorldBounds(true);
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
@@ -154,9 +160,11 @@ class Play extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // obstacles update
 
-        var value = Phaser.Math.Between(1, 4);
+        var value = Phaser.Math.Between(1, 3);
         
+        this.physics.add.collider(this.scientist, this.pH);
         this.ob03.setVelocity(-500, 0);
+        this.pH.setVelocity(0, 0);
 
         //this.ob02.update();
         //this.ob02.setOffset(20, 0);
@@ -257,15 +265,25 @@ class Play extends Phaser.Scene {
         if(this.checkCollision(this.scientist, this.ob03)) {
             this.timesHit++;
             //this.ob03.reset();
-            this.ob03.setSize(1, 1);
-            this.ob03.setOffset(500, 500);
+            //this.ob03.setSize(1, 1);
+            //this.ob03.setOffset(500, 500);
             this.ob03.alpha = 0;
+            this.ob03.destroy();
+            this.reset(this.ob03);
             console.log("ob3 hit")
         }
-        
-        if (this.timesHit >= 100){
+        // temp value for testing, will fix
+        if (this.timesHit >= 2){
             this.gameOver = true;
             this.scene.start("endScene");
+        }
+    }
+
+    reset(object) {
+        if(object == this.ob03){
+            this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0)
+            this.ob03.setSize(300, 150, true);
+            this.ob03.setOffset(0, 350);
         }
     }
 
