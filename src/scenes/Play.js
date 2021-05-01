@@ -7,9 +7,9 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
         this.load.image('vignette', './assets/vignette.png');
-        this.load.image('obj01', './assets/body.png');
-        this.load.image('obj02', './assets/mummy.png');
-        this.load.image('obj03', './assets/light.png');
+        this.load.image('ob01', './assets/body.png');
+        this.load.image('ob02', './assets/mummy.png');
+        this.load.image('ob03', './assets/light.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
@@ -19,7 +19,6 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        debugger
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
@@ -27,8 +26,8 @@ class Play extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
-        this.ob01 = new Obstacles(this, game.config.width + 10, 320, 'body', 0).setOrigin(0, 0);
-        this.ob02 = new Obstacles(this, game.config.width + 10, 250, 'mummy', 0).setOrigin(0,0);
+        this.ob01 = new Obstacles(this, game.config.width + 10, 320, 'ob01', 0).setOrigin(0, 0);
+        this.ob02 = new Obstacles(this, game.config.width + 10, 285, 'ob02', 0).setOrigin(0,0);
         this.ob03 = new Obstacles(this, game.config.width + 10, 10, 'light', 0).setOrigin(0,0);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,12 +89,14 @@ class Play extends Phaser.Scene {
         this.gameOver = false;
 
         this.timesHit = 0; //two hits = gameOver
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
         this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(0, 0, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //clock
         let timeConfig = {
@@ -134,16 +135,19 @@ class Play extends Phaser.Scene {
 
         // option to restart game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            this.scene.restart();
+            //this.scene.restart();
+            this.scene.start("menuScene");
         }
 
         // makes background scroll 
         this.lab.tilePositionX += 15;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // obstacles
+        // obstacles update
 
         var value = Phaser.Math.Between(1, 4);
+
+        this.ob02.update();
 
         /*
         // while !(obj.position is on screen)
@@ -180,8 +184,8 @@ class Play extends Phaser.Scene {
         if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
-            this.scientist.body.setVelocityY(-200);
-            this.scientist.setOffset(20, -30);
+            this.scientist.body.setVelocityY(-400);
+            this.scientist.setOffset(20, -20);
             this.scientist.anims.play('jump');
         }
 
@@ -210,36 +214,40 @@ class Play extends Phaser.Scene {
             //If we want the sliding animations to play later, I can do what i did for the jumping anim but slightly different
             this.scientist.anims.play('slide'); 
         }
-
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
+        /*
+        //@drewgra the loop works but it can't read the object 
+        // check collisions on all objects
         for (let i = 1; i <= 3; i ++) {
-            let objNum = 'obj0' + i; //outputs obj01, obj02, and obj03
+            let objNum = 'ob0' + i; //outputs obj01, obj02, and obj03
             this.checkCollision(this.scientist, this.objNum); //dunno if this works
         }
-        
-        /* if the above doesn't work just use these lol its the same thing but hardcoded:
-        this.checkCollision(this.scientist, this.obj01);
-        this.checkCollision(this.scientist, this.obj02);
-        this.checkCollision(this.scientist, this.obj03);
-
-        if the for loop works then maybe we could use it for something else also but idk
         */
 
-        if (this.timesHit >= 2){
-            //end game
+        if(this.checkCollision(this.scientist, this.ob02)) {
+            this.ob02.alpha = 0; 
+            this.scientist.setOffset(-10, 20); 
+            this.timesHit++;
+            console.log("hit")
+        }
+        
+        // I dont know why it reads each collision like 30 times but it does so 59 its two hits
+        if (this.timesHit >= 59){
             this.gameOver = true;
-            //removes timer
-            this.time.removeEvent(timer);
             this.scene.start("endScene");
         }
     }
 
     checkCollision(scientist, object) {
-        if(this.physics.collide(scientist, object)) { //scientist = this.scientist and object = this.objX number
-            // if player hits an obstacle once, set spider's X to -300
-            // move scientist to (.5, 0)
-            this.timesHit++;
+        if (scientist.x < object.x + object.width && 
+            scientist.x + scientist.width > object.x && 
+            scientist.y < object.y + object.height &&
+            scientist.height + scientist.y > object. y) {
+                return true;
+        } else {
+            return false;
         }
     }
 }

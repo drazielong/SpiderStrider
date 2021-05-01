@@ -5,23 +5,20 @@ class End extends Phaser.Scene {
 
     preload(){
         // load assets
-        this.load.image('end', './assets/end.png');
+        this.load.image('gameover', './assets/gameover.png');
     }
 
     create() {
-        this.title = this.add.tileSprite(0, 0, 3840, 480, 'menu').setOrigin(0, 0);
+        this.title = this.add.tileSprite(0, 0, 3840, 480, 'gameover').setOrigin(0, 0);
 
         // define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-          // Novice mode
-          game.settings = {
-            //gameTimer: 60000    
-          }
-          //this.sound.play('sfx_beep');  
-        }
+      if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        //this.sound.play('sfx_beep');  
+        this.scene.start("menuScene");  
       }
+    }
 }

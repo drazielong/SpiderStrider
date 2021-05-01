@@ -21,6 +21,7 @@ class Menu extends Phaser.Scene {
           // Novice mode
           game.settings = {
               //gameTimer: 60000    
+              obSpeed: 15,
           }
           //this.sound.play('sfx_beep');  
           this.scene.start("playScene");  
@@ -29,10 +30,11 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
             // Novice mode
             game.settings = {
-              //gameTimer: 60000    
+              //gameTimer: 60000 
+              obSpeed: 18,   
             }
             //this.sound.play('sfx_beep');  
             this.scene.start("hardScene");  
-          }
-      }
+        }
+    }
 }
