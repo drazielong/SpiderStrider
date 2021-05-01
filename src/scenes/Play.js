@@ -7,9 +7,9 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
         this.load.image('vignette', './assets/vignette.png');
-        this.load.image('body', './assets/body.png');
-        this.load.image('mummy', './assets/mummy.png');
-        this.load.image('light', './assets/light.png');
+        this.load.image('obj01', './assets/body.png');
+        this.load.image('obj02', './assets/mummy.png');
+        this.load.image('obj03', './assets/light.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
@@ -19,6 +19,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        debugger
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
@@ -89,7 +90,6 @@ class Play extends Phaser.Scene {
         this.gameOver = false;
 
         this.timesHit = 0; //two hits = gameOver
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
         this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
@@ -98,27 +98,40 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //clock
-        let scoreConfig = {
+        let timeConfig = {
             fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#000000',
-            color: '#39FF14',
-            align: 'right',
+            fontSize: '35px',
+            fontStyle: 'bold',
+            //backgroundColor: '#000000',
+            //color: '#39FF14',
+            stroke: '#000000',
+            strokeThickness: 6,
+            fill: '#ff0000',
+            align: 'left',
             padding: {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 350
+            fixedWidth: 250
         }
-        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.gameOver = true;
-            }, null, this);
-        this.clockTimer = this.add.text(borderUISize + borderPadding * 15, borderUISize + borderPadding * 2, 'Time remaining:' + game.settings.gameTimer, scoreConfig);
+
+        this.timer = this.time.addEvent({
+            delay: 10000000000, //time cap 
+            loop: false,
+            startAt: 0,
+            timeScale: 0.12, //i think this is the closest i could get to making it look like normal seconds on my pc, might not be the same for everyone
+            paused: false
+        })
+
+        //set text for timer
+        this.clockTimer = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
+        console.log(timeConfig);
     }
 
     update() {
-        //time
-        this.clockTimer.text = ('Time remaining:' + Math.floor(this.clock.getRemainingSeconds()));
+        //time update
+        this.clockTimer.text = ('Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
+
         // option to restart game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.restart();
@@ -170,8 +183,6 @@ class Play extends Phaser.Scene {
             this.scientist.body.setVelocityY(-200);
             this.scientist.setOffset(20, -30);
             this.scientist.anims.play('jump');
-            
-    
         }
 
         //reset to run on landing
@@ -201,27 +212,34 @@ class Play extends Phaser.Scene {
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // check collisions
-        if(this.physics.collide(this.scientist, this.ob01)) {
-            // if player hits an obstacle once, set spider's X to -300
-            // move scientist to (.5, 0)
-            this.timesHit++;
+        // check collisions on all objects
+        for (let i = 1; i <= 3; i ++) {
+            let objNum = 'obj0' + i; //outputs obj01, obj02, and obj03
+            this.checkCollision(this.scientist, this.objNum); //dunno if this works
         }
+        
+        /* if the above doesn't work just use these lol its the same thing but hardcoded:
+        this.checkCollision(this.scientist, this.obj01);
+        this.checkCollision(this.scientist, this.obj02);
+        this.checkCollision(this.scientist, this.obj03);
 
-        if (this.physics.collide(this.scientist, this.ob02)) {
-            //if player hits an obstacle once, set spider's X to -300
-            this.timesHit++;
-        }
-
-        if (this.physics.collide(this.scientist, this.ob03)) {
-            //if player hits an obstacle once, set spider's X to -300
-            this.timesHit++;
-        }
+        if the for loop works then maybe we could use it for something else also but idk
+        */
 
         if (this.timesHit >= 2){
             //end game
             this.gameOver = true;
-            //this.scene.start("endScene"); 
+            //removes timer
+            this.time.removeEvent(timer);
+            this.scene.start("endScene");
+        }
+    }
+
+    checkCollision(scientist, object) {
+        if(this.physics.collide(scientist, object)) { //scientist = this.scientist and object = this.objX number
+            // if player hits an obstacle once, set spider's X to -300
+            // move scientist to (.5, 0)
+            this.timesHit++;
         }
     }
 }
