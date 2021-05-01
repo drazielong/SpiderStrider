@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('lab', './assets/lab.png');
+        this.load.image('floor', './assets/floor.png');
         this.load.image('vignette', './assets/vignette.png');
         this.load.image('ob01', './assets/body.png');
         this.load.image('ob02', './assets/mummy.png');
@@ -26,9 +27,17 @@ class Play extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
-        this.ob01 = new Obstacles(this, game.config.width + 10, 320, 'ob01', 0).setOrigin(0, 0);
-        this.ob02 = new Obstacles(this, game.config.width + 10, 285, 'ob02', 0).setOrigin(0,0);
-        this.ob03 = new Obstacles(this, game.config.width + 10, 10, 'light', 0).setOrigin(0,0);
+        this.ob01 = this.physics.add.image(game.config.width + 20, 330, 'ob01').setOrigin(0,0)
+        this.ob01.setSize(200, 100, true);
+        this.ob01.setOffset(50, 10);
+
+        this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0)
+        this.ob02.setSize(100, 150, true);
+        this.ob02.setOffset(50, 10);
+
+        this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0)
+        this.ob03.setSize(300, 150, true);
+        this.ob03.setOffset(0, 350);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config
@@ -61,19 +70,19 @@ class Play extends Phaser.Scene {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add player
-        this.scientist = this.physics.add.sprite(400, 480,'run').setOrigin(0.25, 0);
+        this.scientist = this.physics.add.sprite(500, 480,'run').setOrigin(0.25, 0);
         this.scientist.setSize(200,280);
         this.scientist.setOffset(20, 0);
         this.scientist.anims.play('run');
-        this.scientist.isRunning = false;
         this.scientist.moveSpeed = 7;
+        this.scientist.isRunning = false;
         this.scientist.isJumping = false;
         this.scientist.isSliding = false;
         this.scientist.setCollideWorldBounds(true);
         //this.scientist.onWorldBounds = true;
         
         //add spider
-        let spider = this.add.sprite(-400, 50, 'spiderRun').setOrigin(0, 0);
+        let spider = this.add.sprite(-300, 40, 'spiderRun').setOrigin(0, 0);
         spider.anims.play('spiderRun');
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +105,7 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(0, 0, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
-
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //clock
         let timeConfig = {
@@ -146,8 +155,11 @@ class Play extends Phaser.Scene {
         // obstacles update
 
         var value = Phaser.Math.Between(1, 4);
+        
+        this.ob03.setVelocity(-500, 0);
 
-        this.ob02.update();
+        //this.ob02.update();
+        //this.ob02.setOffset(20, 0);
 
         /*
         // while !(obj.position is on screen)
@@ -184,8 +196,9 @@ class Play extends Phaser.Scene {
         if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
-            this.scientist.body.setVelocityY(-400);
+            this.scientist.body.setVelocityY(-350);
             this.scientist.setOffset(20, -20);
+            this.scientist.setSize(50, 180);
             this.scientist.anims.play('jump');
         }
 
@@ -218,7 +231,7 @@ class Play extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
         /*
-        //@drewgra the loop works but it can't read the object 
+        // @drewgra the loop works but it can't read the object 
         // check collisions on all objects
         for (let i = 1; i <= 3; i ++) {
             let objNum = 'ob0' + i; //outputs obj01, obj02, and obj03
@@ -226,26 +239,39 @@ class Play extends Phaser.Scene {
         }
         */
 
-        if(this.checkCollision(this.scientist, this.ob02)) {
-            this.ob02.alpha = 0; 
-            this.scientist.setOffset(-10, 20); 
+        if(this.checkCollision(this.scientist, this.ob01)) {
             this.timesHit++;
-            console.log("hit")
+            //this.ob01.reset();
+            this.ob01.alpha = 0;
+            console.log("ob1 hit")
+        }
+
+        if(this.checkCollision(this.scientist, this.ob02)) {
+            this.timesHit++;
+            //this.ob02.reset();
+            // hides sprite but doesnt remove hitbox
+            this.ob02.alpha = 0;
+            console.log("ob2 hit")
+        }
+
+        if(this.checkCollision(this.scientist, this.ob03)) {
+            this.timesHit++;
+            //this.ob03.reset();
+            this.ob03.setSize(1, 1);
+            this.ob03.setOffset(500, 500);
+            this.ob03.alpha = 0;
+            console.log("ob3 hit")
         }
         
-        // I dont know why it reads each collision like 30 times but it does so 59 its two hits
-        if (this.timesHit >= 59){
+        if (this.timesHit >= 100){
             this.gameOver = true;
             this.scene.start("endScene");
         }
     }
 
     checkCollision(scientist, object) {
-        if (scientist.x < object.x + object.width && 
-            scientist.x + scientist.width > object.x && 
-            scientist.y < object.y + object.height &&
-            scientist.height + scientist.y > object. y) {
-                return true;
+        if(this.physics.collide(scientist, object)) {
+            return true;
         } else {
             return false;
         }

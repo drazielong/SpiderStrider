@@ -4,7 +4,6 @@ class Obstacles extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
 
         // has to match scene speed
-        //this.moveSpeed = 15;
         this.moveSpeed = game.settings.obSpeed;
     }
 
