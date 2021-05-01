@@ -96,11 +96,31 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(0, 0, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
         this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //clock
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#000000',
+            color: '#39FF14',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 350
+        }
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+            this.gameOver = true;
+            }, null, this);
+        this.clockTimer = this.add.text(borderUISize + borderPadding * 15, borderUISize + borderPadding * 2, 'Time remaining:' + game.settings.gameTimer, scoreConfig);
     }
 
     update() {
+        //time
+        this.clockTimer.text = ('Time remaining:' + Math.floor(this.clock.getRemainingSeconds()));
         // option to restart game
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySpace)) {
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.restart();
         }
 
@@ -148,7 +168,10 @@ class Play extends Phaser.Scene {
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
             this.scientist.body.setVelocityY(-200);
+            this.scientist.setOffset(20, -30);
             this.scientist.anims.play('jump');
+            
+    
         }
 
         //reset to run on landing
