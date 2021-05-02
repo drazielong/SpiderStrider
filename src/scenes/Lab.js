@@ -1,6 +1,6 @@
-class Play extends Phaser.Scene {
+class Lab extends Phaser.Scene {
     constructor() {
-        super("playScene");
+        super("labScene");
     }
     
     preload() {
@@ -33,17 +33,20 @@ class Play extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
-        this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0)
+        this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
         this.ob01.setSize(200, 100, true);
         this.ob01.setOffset(50, 10);
+        this.ob01.body.setAllowGravity(false);
 
-        this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0)
+        this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
         this.ob02.setSize(100, 150, true);
         this.ob02.setOffset(50, 10);
+        this.ob02.body.setAllowGravity(false);
 
-        this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0)
+        this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
         this.ob03.setSize(300, 150, true);
         this.ob03.setOffset(0, 350);
+        this.ob03.body.setAllowGravity(false);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config
@@ -166,30 +169,35 @@ class Play extends Phaser.Scene {
         
         // obstacle randomization
         var value = Phaser.Math.Between(1, 3);
-        console.log(value);
 
         this.ob03.setVelocity(-500, 0);
 
-        //while(this.ob03.x > 3840 || this.ob03.x < 0 )
-        //{
-        // dead body
-        if(value == 1){
-            console.log("1");
-            //this.ob01.setVelocity(-500, 0);
-        } 
+        //if(this.ob03.x <= 0 || this.ob02.x <= 0 || this.ob01.x <= 0)
+        //console.log("time ", Math.floor(this.timer.getElapsedSeconds() * 10))
 
-        // mummy
-        if (value == 2) {
-            console.log("2");
-            //this.ob02.setVelocity(-500, 0);
-        } 
+        /*if((this.ob03.x <= 0 || this.ob03.x >= game.config.width) || (this.ob02.x <= 0 || this.ob02.x >= game.config.width) || (this.ob01.x <= 0 || this.ob01.x >= game.config.width))
+        {
+            // dead body
+            if(value == 1){
+                console.log("1");
+                this.recreate(this.ob01);
+                this.ob01.setVelocity(-500, 0);
+            } 
 
-        // light
-        if (value == 3) {
-            console.log("3");
-            this.ob03.setVelocity(-500, 0);
-        } 
-        //}
+            // mummy
+            else if (value == 2) {
+                console.log("2");
+                this.recreate(this.ob02);
+                this.ob02.setVelocity(-500, 0);
+            } 
+
+            // light
+            if (value == 3) {
+                console.log("3");
+                this.recreate(this.ob03);
+                this.ob03.setVelocity(-500, 0);
+            } 
+        }*/
     
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,14 +248,6 @@ class Play extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
-        /*
-        // @drewgra the loop works but it can't read the object 
-        // check collisions on all objects
-        for (let i = 1; i <= 3; i ++) {
-            let objNum = 'ob0' + i; //outputs obj01, obj02, and obj03
-            this.checkCollision(this.scientist, this.objNum); //dunno if this works
-        }
-        */
 
         // checks hits on ob01, resets on hit
         if(this.checkCollision(this.scientist, this.ob01)) {
@@ -255,13 +255,13 @@ class Play extends Phaser.Scene {
             this.timesHit++;
             this.ob01.alpha = 0;
             this.ob01.destroy();
-            this.reset(this.ob01);
+            //this.recreate(this.ob01);
         // checks hits on ob01, resets on miss
         } else if (this.ob01.x < -300){
             console.log("ob01 miss")
             this.ob01.alpha = 0;
             this.ob01.destroy();
-            this.reset(this.ob01);
+            //this.recreate(this.ob01);
         }
 
         // checks hits on ob02, resets on hit
@@ -269,13 +269,13 @@ class Play extends Phaser.Scene {
             this.timesHit++;
             this.ob02.alpha = 0;
             this.ob02.destroy();
-            this.reset(this.ob02);
+            //this.recreate(this.ob02);
             console.log("ob02 hit")
         // checks hits on ob02, resets on miss
         } else if (this.ob02.x < -300){
             this.ob02.alpha = 0;
             this.ob02.destroy();
-            this.reset(this.ob02);
+            //this.recreate(this.ob02);
             console.log("ob02 miss")
         }
 
@@ -284,14 +284,14 @@ class Play extends Phaser.Scene {
             this.timesHit++;
             this.ob03.alpha = 0;
             this.ob03.destroy();
-            this.reset(this.ob03);
-            console.log("ob3 hit")
+            this.recreate(this.ob03);
+            console.log("ob03 hit")
         // checks hits on ob03, resets on miss
         } else if (this.ob03.x < -300){
             this.ob03.alpha = 0;
             this.ob03.destroy();
-            this.reset(this.ob03);
-            console.log("ob3 miss")
+            this.recreate(this.ob03);
+            console.log("ob03 miss")
         }
        
         if(this.timesHit >= 2){
@@ -300,23 +300,26 @@ class Play extends Phaser.Scene {
         }
     }
 
-    reset(object) {
+    recreate(object) {
         if(object == this.ob01){
             this.ob01 = this.physics.add.image(game.config.width + 20, 330, 'ob01').setOrigin(0,0)
             this.ob01.setSize(200, 100, true);
             this.ob01.setOffset(50, 10);
+            this.ob01.body.setAllowGravity(false);
         }
 
         if(object == this.ob02){
             this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0)
             this.ob02.setSize(100, 150, true);
             this.ob02.setOffset(50, 10);
+            this.ob02.body.setAllowGravity(false);
         }
         
         if(object == this.ob03){
             this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0)
             this.ob03.setSize(300, 150, true);
             this.ob03.setOffset(0, 350);
+            this.ob03.body.setAllowGravity(false);
         }
     }
 
