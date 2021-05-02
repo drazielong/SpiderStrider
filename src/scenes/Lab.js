@@ -4,10 +4,12 @@ class Lab extends Phaser.Scene {
     }
     
     preload() {
-        // load images/tile sprites
+        // images
         this.load.image('lab', './assets/lab.png');
         this.load.image('pH', './assets/placeHolder.png');
         this.load.image('vignette', './assets/vignette.png');
+
+        // obstacles
         this.load.image('ob01', './assets/body.png');
         this.load.image('ob02', './assets/mummy.png');
         this.load.image('ob03', './assets/light.png');
@@ -33,7 +35,7 @@ class Lab extends Phaser.Scene {
         this.pH.setCollideWorldBounds(true);
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //add obstacles
+        // add obstacles
         this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
         this.ob01.setSize(200, 100, true);
         this.ob01.setOffset(50, 10);
@@ -96,7 +98,6 @@ class Lab extends Phaser.Scene {
         this.scientist.isJumping = false;
         this.scientist.isSliding = false;
         this.scientist.setCollideWorldBounds(true);
-        //this.scientist.onWorldBounds = true;
         
         //add spider
         let spider = this.add.sprite(-300, 40, 'spiderRun').setOrigin(0, 0);
@@ -115,7 +116,6 @@ class Lab extends Phaser.Scene {
         this.gameOver = false;
 
         this.timesHit = 0; //two hits = gameOver
-        
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //clock
@@ -161,7 +161,6 @@ class Lab extends Phaser.Scene {
 
         // option to restart game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            //this.scene.restart();
             this.scene.start("menuScene");
         }
 
@@ -173,31 +172,37 @@ class Lab extends Phaser.Scene {
         this.physics.add.collider(this.scientist, this.pH);
         this.pH.setVelocity(0, 0);
 
-        /*
-        //obstacle randomization, only if nothing is on screen
-        //daren suggested that there could be a delay to running this code block: maybe a second or two would be fine
-        if (!this.obstacleOnscreen) {
-            var value = Phaser.Math.Between(1, 3);
+        if((this.ob01.x >= 0 && this.ob01.x <= game.config.width + 19) || (this.ob02.x >= 0 && this.ob02.x <= game.config.width + 19) || (this.ob03.x >= 0 && this.ob03.x <= game.config.width + 19) || (this.ob04.x >= 0 && this.ob04.x <= game.config.width + 19))
+        {
+            this.obstacleOnscreen = true;
+        } else {
+            this.obstacleOnscreen = false;
+        }
+
+        if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1))
+        {
+            var value = Phaser.Math.Between(1, 4);
+
             if(value == 1) {
-                //output ob01 to the scene
                 this.recreate(this.ob01);
                 this.obstacleOnscreen = true;
             }
     
             if(value == 2) {
-                //output ob02 to the scene
                 this.recreate(this.ob02);
                 this.obstacleOnscreen = true;
             }
     
             if(value == 3) {
-                //output ob03 to the scene
                 this.recreate(this.ob03);
                 this.obstacleOnscreen = true;
             }
-        }    
-        */
-        this.ob04.setVelocity(-500, 0);
+
+            if(value == 4) {
+                this.recreate(this.ob04);
+                this.obstacleOnscreen = true;
+            }
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // movement
@@ -244,19 +249,16 @@ class Lab extends Phaser.Scene {
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // check collisions on all objects
+        // check collisions
         // checks hits on ob01, resets on hit
         if(this.checkCollision(this.scientist, this.ob01)) {
-            console.log("ob01 hit")
             this.timesHit++;
             this.ob01.alpha = 0;
             this.ob01.destroy();
             this.obstacleOnscreen = false;
+            this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
         // checks hits on ob01, resets on miss
         } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
-            //tried adding a second condition to check here to prevent it from running more than once but it doesnt seem to help. Maybe that is not the problem?
-            //I also tried this.ob01.x = -300 but it never worked
-            console.log("ob01 miss")
             this.ob01.alpha = 0;
             this.ob01.destroy();
             this.obstacleOnscreen = false;
@@ -268,13 +270,12 @@ class Lab extends Phaser.Scene {
             this.ob02.alpha = 0;
             this.ob02.destroy();
             this.obstacleOnscreen = false;
-            console.log("ob02 hit")
+            this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
         // checks hits on ob02, resets on miss
         } else if (this.obstacleOnscreen && this.ob02.x < -300){
             this.ob02.alpha = 0;
             this.ob02.destroy();
             this.obstacleOnscreen = false;
-            console.log("ob02 miss")
         }
 
         // checks hits on ob03, resets on hit
@@ -283,13 +284,12 @@ class Lab extends Phaser.Scene {
             this.ob03.alpha = 0;
             this.ob03.destroy();
             this.obstacleOnscreen = false;
-            console.log("ob03 hit")
+            this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
         // checks hits on ob03, resets on miss
         } else if (this.obstacleOnscreen && this.ob03.x < -300){
             this.ob03.alpha = 0;
             this.ob03.destroy();
             this.obstacleOnscreen = false;
-            console.log("ob03 miss")
         }
 
         // checks hits on ob04, resets on hit
@@ -297,14 +297,13 @@ class Lab extends Phaser.Scene {
             this.timesHit++;
             this.ob04.alpha = 0;
             this.ob04.destroy();
-            this.recreate(this.ob04);
-            console.log("ob04 hit")
+            this.obstacleOnscreen = false;
+            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
         // checks hits on ob04, resets on miss
-        } else if (this.ob04.x < -300){
+        } else if (this.obstacleOnscreen && this.ob04.x < -300){
             this.ob04.alpha = 0;
             this.ob04.destroy();
-            this.recreate(this.ob04);
-            console.log("ob04 miss")
+            this.obstacleOnscreen = false;
         }
 
         if(this.timesHit >= 2){
@@ -317,9 +316,9 @@ class Lab extends Phaser.Scene {
     }
 
     recreate(object) {
-        var placementValue = Phaser.Math.Between(100, 600);
+        //var placementValue = Phaser.Math.Between(100, 600);
         if(object == this.ob01){
-            this.ob01 = this.physics.add.image(game.config.width + placementValue, 330, 'ob01').setOrigin(0,0)
+            this.ob01 = this.physics.add.image(game.config.width, 330, 'ob01').setOrigin(0,0)
             this.ob01.setSize(200, 100, true);
             this.ob01.setOffset(50, 10);
             this.ob01.body.setAllowGravity(false);
@@ -327,7 +326,7 @@ class Lab extends Phaser.Scene {
         }
 
         if(object == this.ob02){
-            this.ob02 = this.physics.add.image(game.config.width + placementValue, 300, 'ob02').setOrigin(0,0)
+            this.ob02 = this.physics.add.image(game.config.width, 300, 'ob02').setOrigin(0,0)
             this.ob02.setSize(100, 150, true);
             this.ob02.setOffset(50, 10);
             this.ob02.body.setAllowGravity(false);
@@ -335,7 +334,7 @@ class Lab extends Phaser.Scene {
         }
         
         if(object == this.ob03){
-            this.ob03 = this.physics.add.image(game.config.width + placementValue, 0, 'ob03').setOrigin(0,0)
+            this.ob03 = this.physics.add.image(game.config.width, 0, 'ob03').setOrigin(0,0)
             this.ob03.setSize(300, 150, true);
             this.ob03.setOffset(0, 350);
             this.ob03.body.setAllowGravity(false);
@@ -343,7 +342,7 @@ class Lab extends Phaser.Scene {
         }
 
         if(object == this.ob04){
-            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+            this.ob04 = this.physics.add.image(game.config.width, -10, 'ob04').setOrigin(0,0);
             this.ob04.setSize(250, 200, true);
             this.ob04.setOffset(50, 20);
             this.ob04.body.setAllowGravity(false);
