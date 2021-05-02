@@ -14,6 +14,7 @@ class Forest extends Phaser.Scene {
         this.load.image('ob01', './assets/log.png');
         this.load.image('ob02', './assets/net.png');
         this.load.image('ob03', './assets/trapSpider.png');
+        this.load.image('ob04', './assets/topOb.png');
         this.load.image('pH', './assets/placeHolder.png');
 
         // spritesheets
@@ -53,6 +54,11 @@ class Forest extends Phaser.Scene {
         this.ob03.setSize(250, 150, true);
         this.ob03.setOffset(50, 20);
         this.ob03.body.setAllowGravity(false);
+
+        this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+        this.ob04.setSize(250, 200, true);
+        this.ob04.setOffset(10, 20);
+        this.ob04.body.setAllowGravity(false);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config
@@ -94,7 +100,6 @@ class Forest extends Phaser.Scene {
         this.scientist.isJumping = false;
         this.scientist.isSliding = false;
         this.scientist.setCollideWorldBounds(true);
-        //this.scientist.onWorldBounds = true;
         
         //add spider
         let spider = this.add.sprite(-300, 40, 'spiderRun').setOrigin(0, 0);
@@ -111,7 +116,6 @@ class Forest extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // GAME OVER
         this.gameOver = false;
-
         this.timesHit = 0; //two hits = gameOver
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,8 +147,6 @@ class Forest extends Phaser.Scene {
 
         //set text for timer
         this.clockTimer = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
-        //
-        console.log(timeConfig);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
@@ -176,7 +178,7 @@ class Forest extends Phaser.Scene {
         // obstacle randomization
         var value = Phaser.Math.Between(1, 3);
 
-        this.ob01.setVelocity(-700, 0);
+        this.ob04.setVelocity(-700, 0);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // movement
@@ -194,7 +196,7 @@ class Forest extends Phaser.Scene {
             this.scientist.isJumping = true;
             this.scientist.body.setVelocityY(-450);
             this.scientist.setOffset(20, -20);
-            this.scientist.setSize(50, 200);
+            this.scientist.setSize(210, 200);
             this.scientist.anims.play('jump');
         }
 
@@ -271,6 +273,21 @@ class Forest extends Phaser.Scene {
             this.recreate(this.ob03);
             console.log("ob03 miss")
         }
+
+        // checks hits on ob04, resets on hit
+        if(this.checkCollision(this.scientist, this.ob04)) {
+            this.timesHit++;
+            this.ob04.alpha = 0;
+            this.ob04.destroy();
+            this.recreate(this.ob04);
+            console.log("ob04 hit")
+        // checks hits on ob04, resets on miss
+        } else if (this.ob04.x < -300){
+            this.ob04.alpha = 0;
+            this.ob04.destroy();
+            this.recreate(this.ob04);
+            console.log("ob04 miss")
+        }
        
         if(this.timesHit >= 2){
             this.gameOver = true;
@@ -298,6 +315,13 @@ class Forest extends Phaser.Scene {
             this.ob03.setSize(250, 150, true);
             this.ob03.setOffset(50, 20);
             this.ob03.body.setAllowGravity(false);
+        }
+
+        if(object == this.ob04){
+            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+            this.ob04.setSize(250, 200, true);
+            this.ob04.setOffset(50, 20);
+            this.ob04.body.setAllowGravity(false);
         }
     }
 

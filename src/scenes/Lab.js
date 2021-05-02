@@ -11,6 +11,7 @@ class Lab extends Phaser.Scene {
         this.load.image('ob01', './assets/body.png');
         this.load.image('ob02', './assets/mummy.png');
         this.load.image('ob03', './assets/light.png');
+        this.load.image('ob04', './assets/topOb.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
@@ -20,7 +21,6 @@ class Lab extends Phaser.Scene {
     }
 
     create() {
-        debugger
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
@@ -48,6 +48,11 @@ class Lab extends Phaser.Scene {
         this.ob03.setSize(300, 150, true);
         this.ob03.setOffset(0, 350);
         this.ob03.body.setAllowGravity(false);
+
+        this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+        this.ob04.setSize(250, 200, true);
+        this.ob04.setOffset(50, 20);
+        this.ob04.body.setAllowGravity(false);
 
         this.obstacleOnscreen = false;
 
@@ -141,7 +146,7 @@ class Lab extends Phaser.Scene {
         this.timerText = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
         //reserve score?
         let score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
-        
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
         this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
@@ -168,6 +173,7 @@ class Lab extends Phaser.Scene {
         this.physics.add.collider(this.scientist, this.pH);
         this.pH.setVelocity(0, 0);
 
+        /*
         //obstacle randomization, only if nothing is on screen
         //daren suggested that there could be a delay to running this code block: maybe a second or two would be fine
         if (!this.obstacleOnscreen) {
@@ -190,6 +196,8 @@ class Lab extends Phaser.Scene {
                 this.obstacleOnscreen = true;
             }
         }    
+        */
+        this.ob04.setVelocity(-500, 0);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // movement
@@ -207,7 +215,7 @@ class Lab extends Phaser.Scene {
             this.scientist.isJumping = true;
             this.scientist.body.setVelocityY(-350);
             this.scientist.setOffset(20, -20);
-            this.scientist.setSize(50, 200);
+            this.scientist.setSize(210, 200);
             this.scientist.anims.play('jump');
         }
 
@@ -284,6 +292,21 @@ class Lab extends Phaser.Scene {
             console.log("ob03 miss")
         }
 
+        // checks hits on ob04, resets on hit
+        if(this.checkCollision(this.scientist, this.ob04)) {
+            this.timesHit++;
+            this.ob04.alpha = 0;
+            this.ob04.destroy();
+            this.recreate(this.ob04);
+            console.log("ob04 hit")
+        // checks hits on ob04, resets on miss
+        } else if (this.ob04.x < -300){
+            this.ob04.alpha = 0;
+            this.ob04.destroy();
+            this.recreate(this.ob04);
+            console.log("ob04 miss")
+        }
+
         if(this.timesHit >= 2){
             //pause timer, save time to score
             this.timer.paused = true;
@@ -317,6 +340,14 @@ class Lab extends Phaser.Scene {
             this.ob03.setOffset(0, 350);
             this.ob03.body.setAllowGravity(false);
             this.ob03.setVelocity(-500, 0);
+        }
+
+        if(object == this.ob04){
+            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+            this.ob04.setSize(250, 200, true);
+            this.ob04.setOffset(50, 20);
+            this.ob04.body.setAllowGravity(false);
+            this.ob04.setVelocity(-500, 0);
         }
     }
 
