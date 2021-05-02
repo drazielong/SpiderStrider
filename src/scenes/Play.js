@@ -27,7 +27,7 @@ class Play extends Phaser.Scene {
 
         // this acts as an invisible box so that the player doesnt get pushed off screen
         this.pH = this.physics.add.image(-100, 470, 'pH').setOrigin(0,0);
-        this.pH.setSize(370, 81, true);
+        this.pH.setSize(370, 480, true);
         this.pH.setOffset(120, 0);
         this.pH.setCollideWorldBounds(true);
         
@@ -162,29 +162,35 @@ class Play extends Phaser.Scene {
 
         // obstacle physics
         this.physics.add.collider(this.scientist, this.pH);
-        this.ob03.setVelocity(-500, 0);
         this.pH.setVelocity(0, 0);
-
-        /*
+        
         // obstacle randomization
         var value = Phaser.Math.Between(1, 3);
+        console.log(value);
+
+        this.ob03.setVelocity(-500, 0);
+
+        //while(this.ob03.x > 3840 || this.ob03.x < 0 )
+        //{
         // dead body
         if(value == 1){
             console.log("1");
-            this.ob01.update();
-
+            //this.ob01.setVelocity(-500, 0);
         } 
+
         // mummy
         if (value == 2) {
             console.log("2");
-            this.ob02.update();
+            //this.ob02.setVelocity(-500, 0);
         } 
+
         // light
-        if (value == 2) {
+        if (value == 3) {
             console.log("3");
-            this.ob03.update();
+            this.ob03.setVelocity(-500, 0);
         } 
-        */
+        //}
+    
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // movement
