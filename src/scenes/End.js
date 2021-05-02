@@ -19,6 +19,24 @@ class End extends Phaser.Scene {
         
         // define keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        //clock text config for score
+        let timeConfig = {
+          fontFamily: 'Courier',
+          fontSize: '35px',
+          fontStyle: 'bold',
+          stroke: '#000000',
+          strokeThickness: 6,
+          fill: '#ff0000',
+          align: 'left',
+          padding: {
+              top: 5,
+              bottom: 5,
+          },
+          fixedWidth: 250
+      }
+
+      //display score under game over text
     }
 
     update() {

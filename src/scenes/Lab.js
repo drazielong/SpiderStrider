@@ -20,6 +20,7 @@ class Lab extends Phaser.Scene {
     }
 
     create() {
+        debugger
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
@@ -32,7 +33,7 @@ class Lab extends Phaser.Scene {
         this.pH.setCollideWorldBounds(true);
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // add obstacles
+        //add obstacles
         this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
         this.ob01.setSize(200, 100, true);
         this.ob01.setOffset(50, 10);
@@ -47,6 +48,8 @@ class Lab extends Phaser.Scene {
         this.ob03.setSize(300, 150, true);
         this.ob03.setOffset(0, 350);
         this.ob03.body.setAllowGravity(false);
+
+        this.obstacleOnscreen = false;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config
@@ -121,8 +124,6 @@ class Lab extends Phaser.Scene {
             fontFamily: 'Courier',
             fontSize: '35px',
             fontStyle: 'bold',
-            //backgroundColor: '#000000',
-            //color: '#39FF14',
             stroke: '#000000',
             strokeThickness: 6,
             fill: '#ff0000',
@@ -143,13 +144,14 @@ class Lab extends Phaser.Scene {
         })
 
         //set text for timer
-        this.clockTimer = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
-        console.log(timeConfig);
+        this.timerText = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
+        //reserve score?
+        let score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
     }
 
     update() {
         //time update
-        this.clockTimer.text = ('Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
+        this.timerText.text = ('Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
 
         // option to restart game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
@@ -161,44 +163,32 @@ class Lab extends Phaser.Scene {
         this.lab.tilePositionX += 15;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // obstacles update
-
         // obstacle physics
         this.physics.add.collider(this.scientist, this.pH);
         this.pH.setVelocity(0, 0);
-        
-        // obstacle randomization
-        var value = Phaser.Math.Between(1, 3);
 
-        this.ob03.setVelocity(-500, 0);
-
-        //if(this.ob03.x <= 0 || this.ob02.x <= 0 || this.ob01.x <= 0)
-        //console.log("time ", Math.floor(this.timer.getElapsedSeconds() * 10))
-
-        /*if((this.ob03.x <= 0 || this.ob03.x >= game.config.width) || (this.ob02.x <= 0 || this.ob02.x >= game.config.width) || (this.ob01.x <= 0 || this.ob01.x >= game.config.width))
-        {
-            // dead body
-            if(value == 1){
-                console.log("1");
+        //obstacle randomization, only if nothing is on screen
+        //daren suggested that there could be a delay to running this code block: maybe a second or two would be fine
+        if (!this.obstacleOnscreen) {
+            var value = Phaser.Math.Between(1, 3);
+            if(value == 1) {
+                //output ob01 to the scene
                 this.recreate(this.ob01);
-                this.ob01.setVelocity(-500, 0);
-            } 
-
-            // mummy
-            else if (value == 2) {
-                console.log("2");
-                this.recreate(this.ob02);
-                this.ob02.setVelocity(-500, 0);
-            } 
-
-            // light
-            if (value == 3) {
-                console.log("3");
-                this.recreate(this.ob03);
-                this.ob03.setVelocity(-500, 0);
-            } 
-        }*/
+                this.obstacleOnscreen = true;
+            }
     
+            if(value == 2) {
+                //output ob02 to the scene
+                this.recreate(this.ob02);
+                this.obstacleOnscreen = true;
+            }
+    
+            if(value == 3) {
+                //output ob03 to the scene
+                this.recreate(this.ob03);
+                this.obstacleOnscreen = true;
+            }
+        }    
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // movement
@@ -241,27 +231,26 @@ class Lab extends Phaser.Scene {
             this.scientist.isRunning = false;
             this.scientist.setSize(200, 125);
             this.scientist.setOffset(0, 175);
-            //this is just a single image since the anim will replay as long as you hold the S button
-            //If we want the sliding animations to play later, I can do what i did for the jumping anim but slightly different
             this.scientist.anims.play('slide'); 
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
-
         // checks hits on ob01, resets on hit
         if(this.checkCollision(this.scientist, this.ob01)) {
             console.log("ob01 hit")
             this.timesHit++;
             this.ob01.alpha = 0;
             this.ob01.destroy();
-            //this.recreate(this.ob01);
+            this.obstacleOnscreen = false;
         // checks hits on ob01, resets on miss
-        } else if (this.ob01.x < -300){
+        } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
+            //tried adding a second condition to check here to prevent it from running more than once but it doesnt seem to help. Maybe that is not the problem?
+            //I also tried this.ob01.x = -300 but it never worked
             console.log("ob01 miss")
             this.ob01.alpha = 0;
             this.ob01.destroy();
-            //this.recreate(this.ob01);
+            this.obstacleOnscreen = false;
         }
 
         // checks hits on ob02, resets on hit
@@ -269,13 +258,13 @@ class Lab extends Phaser.Scene {
             this.timesHit++;
             this.ob02.alpha = 0;
             this.ob02.destroy();
-            //this.recreate(this.ob02);
+            this.obstacleOnscreen = false;
             console.log("ob02 hit")
         // checks hits on ob02, resets on miss
-        } else if (this.ob02.x < -300){
+        } else if (this.obstacleOnscreen && this.ob02.x < -300){
             this.ob02.alpha = 0;
             this.ob02.destroy();
-            //this.recreate(this.ob02);
+            this.obstacleOnscreen = false;
             console.log("ob02 miss")
         }
 
@@ -284,42 +273,49 @@ class Lab extends Phaser.Scene {
             this.timesHit++;
             this.ob03.alpha = 0;
             this.ob03.destroy();
-            this.recreate(this.ob03);
+            this.obstacleOnscreen = false;
             console.log("ob03 hit")
         // checks hits on ob03, resets on miss
-        } else if (this.ob03.x < -300){
+        } else if (this.obstacleOnscreen && this.ob03.x < -300){
             this.ob03.alpha = 0;
             this.ob03.destroy();
-            this.recreate(this.ob03);
+            this.obstacleOnscreen = false;
             console.log("ob03 miss")
         }
-       
+
         if(this.timesHit >= 2){
+            //pause timer, save time to score
+            this.timer.paused = true;
+            this.score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
             this.gameOver = true;
             this.scene.start("endScene");
         }
     }
 
     recreate(object) {
+        var placementValue = Phaser.Math.Between(100, 600);
         if(object == this.ob01){
-            this.ob01 = this.physics.add.image(game.config.width + 20, 330, 'ob01').setOrigin(0,0)
+            this.ob01 = this.physics.add.image(game.config.width + placementValue, 330, 'ob01').setOrigin(0,0)
             this.ob01.setSize(200, 100, true);
             this.ob01.setOffset(50, 10);
             this.ob01.body.setAllowGravity(false);
+            this.ob01.setVelocity(-500, 0);
         }
 
         if(object == this.ob02){
-            this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0)
+            this.ob02 = this.physics.add.image(game.config.width + placementValue, 300, 'ob02').setOrigin(0,0)
             this.ob02.setSize(100, 150, true);
             this.ob02.setOffset(50, 10);
             this.ob02.body.setAllowGravity(false);
+            this.ob02.setVelocity(-500, 0);
         }
         
         if(object == this.ob03){
-            this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0)
+            this.ob03 = this.physics.add.image(game.config.width + placementValue, 0, 'ob03').setOrigin(0,0)
             this.ob03.setSize(300, 150, true);
             this.ob03.setOffset(0, 350);
             this.ob03.body.setAllowGravity(false);
+            this.ob03.setVelocity(-500, 0);
         }
     }
 
