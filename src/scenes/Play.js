@@ -33,7 +33,7 @@ class Play extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
-        this.ob01 = this.physics.add.image(game.config.width + 20, 330, 'ob01').setOrigin(0,0)
+        this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0)
         this.ob01.setSize(200, 100, true);
         this.ob01.setOffset(50, 10);
 
@@ -160,18 +160,14 @@ class Play extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // obstacles update
 
-        var value = Phaser.Math.Between(1, 3);
-        
+        // obstacle physics
         this.physics.add.collider(this.scientist, this.pH);
         this.ob03.setVelocity(-500, 0);
         this.pH.setVelocity(0, 0);
 
-        //this.ob02.update();
-        //this.ob02.setOffset(20, 0);
-
         /*
-        // while !(obj.position is on screen)
-
+        // obstacle randomization
+        var value = Phaser.Math.Between(1, 3);
         // dead body
         if(value == 1){
             console.log("1");
@@ -206,7 +202,7 @@ class Play extends Phaser.Scene {
             this.scientist.isJumping = true;
             this.scientist.body.setVelocityY(-350);
             this.scientist.setOffset(20, -20);
-            this.scientist.setSize(50, 180);
+            this.scientist.setSize(50, 200);
             this.scientist.anims.play('jump');
         }
 
@@ -247,39 +243,70 @@ class Play extends Phaser.Scene {
         }
         */
 
+        // checks hits on ob01, resets on hit
         if(this.checkCollision(this.scientist, this.ob01)) {
+            console.log("ob01 hit")
             this.timesHit++;
-            //this.ob01.reset();
             this.ob01.alpha = 0;
-            console.log("ob1 hit")
+            this.ob01.destroy();
+            this.reset(this.ob01);
+        // checks hits on ob01, resets on miss
+        } else if (this.ob01.x < -300){
+            console.log("ob01 miss")
+            this.ob01.alpha = 0;
+            this.ob01.destroy();
+            this.reset(this.ob01);
         }
 
+        // checks hits on ob02, resets on hit
         if(this.checkCollision(this.scientist, this.ob02)) {
             this.timesHit++;
-            //this.ob02.reset();
-            // hides sprite but doesnt remove hitbox
             this.ob02.alpha = 0;
-            console.log("ob2 hit")
+            this.ob02.destroy();
+            this.reset(this.ob02);
+            console.log("ob02 hit")
+        // checks hits on ob02, resets on miss
+        } else if (this.ob02.x < -300){
+            this.ob02.alpha = 0;
+            this.ob02.destroy();
+            this.reset(this.ob02);
+            console.log("ob02 miss")
         }
 
+        // checks hits on ob03, resets on hit
         if(this.checkCollision(this.scientist, this.ob03)) {
             this.timesHit++;
-            //this.ob03.reset();
-            //this.ob03.setSize(1, 1);
-            //this.ob03.setOffset(500, 500);
             this.ob03.alpha = 0;
             this.ob03.destroy();
             this.reset(this.ob03);
             console.log("ob3 hit")
+        // checks hits on ob03, resets on miss
+        } else if (this.ob03.x < -300){
+            this.ob03.alpha = 0;
+            this.ob03.destroy();
+            this.reset(this.ob03);
+            console.log("ob3 miss")
         }
-        // temp value for testing, will fix
-        if (this.timesHit >= 2){
+       
+        if(this.timesHit >= 2){
             this.gameOver = true;
             this.scene.start("endScene");
         }
     }
 
     reset(object) {
+        if(object == this.ob01){
+            this.ob01 = this.physics.add.image(game.config.width + 20, 330, 'ob01').setOrigin(0,0)
+            this.ob01.setSize(200, 100, true);
+            this.ob01.setOffset(50, 10);
+        }
+
+        if(object == this.ob02){
+            this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0)
+            this.ob02.setSize(100, 150, true);
+            this.ob02.setOffset(50, 10);
+        }
+        
         if(object == this.ob03){
             this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0)
             this.ob03.setSize(300, 150, true);
