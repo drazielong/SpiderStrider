@@ -32,7 +32,7 @@ class Menu extends Phaser.Scene {
               obSpeed: 15,
           }
           //this.sound.play('sfx_beep');  
-          this.scene.start("playScene");  
+          this.scene.start("labScene");  
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyA)) {
@@ -42,7 +42,7 @@ class Menu extends Phaser.Scene {
               obSpeed: 20,   
             }
             //this.sound.play('sfx_beep');  
-            this.scene.start("hardScene");  
+            this.scene.start("forestScene");  
         }
     }
 }
