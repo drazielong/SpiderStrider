@@ -111,12 +111,6 @@ class Lab extends Phaser.Scene {
 
         this.timesHit = 0; //two hits = gameOver
         
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // borders
-        this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
-        this.add.rectangle(0, 0, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //clock
@@ -147,6 +141,13 @@ class Lab extends Phaser.Scene {
         this.timerText = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
         //reserve score?
         let score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // borders
+        this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
+        this.add.rectangle(0, game.config.height - 10, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
+        this.add.rectangle(0, 0, game.config.width, 10, 0x5e5e5e).setOrigin(0, 0);
+        this.add.rectangle(game.config.width - 10, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
     }
 
     update() {
