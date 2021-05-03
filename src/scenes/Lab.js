@@ -312,6 +312,14 @@ class Lab extends Phaser.Scene {
             this.gameOver = true;
             this.scene.start("endScene");
         }
+
+        // will change the 10 to 90 after testing
+        if((Math.floor(this.timer.getElapsedSeconds() * 10) > 10))
+        {
+            this.timer.paused = true;
+            this.gameOver = true;
+            this.scene.start("level2Scene");
+        }
     }
 
     recreate(object) {
