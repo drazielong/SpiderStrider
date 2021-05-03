@@ -357,9 +357,8 @@ class Forest extends Phaser.Scene {
         if(this.timesHit >= 2){
             //pause timer, save time to score
             this.timer.paused = true;
-            this.score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
             this.gameOver = true;
-            this.scene.start("endScene");
+            this.scene.start("endScene", { time: Math.floor(this.timer.getElapsedSeconds() * 10) });
         }
     }
 
