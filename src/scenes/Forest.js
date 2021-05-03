@@ -246,6 +246,7 @@ class Forest extends Phaser.Scene {
 
         //sliding conditions
         if(!this.scientist.isJumping && !this.scientist.isSliding && this.scientist.body.blocked.down && keyS.isDown){
+            this.sound.play('slidesfx');
             this.scientist.isSliding = true;
             this.scientist.isRunning = false;
         }

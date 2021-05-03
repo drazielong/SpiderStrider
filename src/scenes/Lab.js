@@ -234,6 +234,7 @@ class Lab extends Phaser.Scene {
         //sliding conditions
         if(!this.scientist.isJumping && !this.scientist.isSliding && this.scientist.body.blocked.down && keyS.isDown){
             this.scientist.isSliding = true;
+            this.sound.play('slidesfx');
             this.scientist.isRunning = false;
         }
         else if(keyS.isUp && !this.scientist.isJumping){
@@ -246,7 +247,7 @@ class Lab extends Phaser.Scene {
             this.scientist.isRunning = false;
             this.scientist.setSize(200, 125);
             this.scientist.setOffset(0, 175);
-            this.sound.play('slidesfx');
+            //this.sound.play('slidesfx');
             this.scientist.anims.play('slide'); 
         }
         
