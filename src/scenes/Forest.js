@@ -146,8 +146,8 @@ class Forest extends Phaser.Scene {
         })
 
         //set text for timer
-        this.clockTimer = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
-
+        this.timerText = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
         this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
@@ -158,7 +158,7 @@ class Forest extends Phaser.Scene {
 
     update() {
         //time update
-        this.clockTimer.text = ('Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
+        this.timerText.text = ('Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
 
         // option to restart game
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)) {
@@ -175,10 +175,37 @@ class Forest extends Phaser.Scene {
         this.physics.add.collider(this.scientist, this.pH);
         this.pH.setVelocity(0, 0);
         
-        // obstacle randomization
-        var value = Phaser.Math.Between(1, 3);
+        if((this.ob01.x >= 0 && this.ob01.x <= game.config.width + 19) || (this.ob02.x >= 0 && this.ob02.x <= game.config.width + 19) || (this.ob03.x >= 0 && this.ob03.x <= game.config.width + 19) || (this.ob04.x >= 0 && this.ob04.x <= game.config.width + 19))
+        {
+            this.obstacleOnscreen = true;
+        } else {
+            this.obstacleOnscreen = false;
+        }
 
-        this.ob04.setVelocity(-700, 0);
+        if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1))
+        {
+            var value = Phaser.Math.Between(1, 4);
+
+            if(value == 1) {
+                this.recreate(this.ob01);
+                this.obstacleOnscreen = true;
+            }
+    
+            if(value == 2) {
+                this.recreate(this.ob02);
+                this.obstacleOnscreen = true;
+            }
+    
+            if(value == 3) {
+                this.recreate(this.ob03);
+                this.obstacleOnscreen = true;
+            }
+
+            if(value == 4) {
+                this.recreate(this.ob04);
+                this.obstacleOnscreen = true;
+            }
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // movement
@@ -194,9 +221,9 @@ class Forest extends Phaser.Scene {
         if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
-            this.scientist.body.setVelocityY(-450);
+            this.scientist.body.setVelocityY(-600);
             this.scientist.setOffset(20, -20);
-            this.scientist.setSize(210, 200);
+            this.scientist.setSize(150, 200);
             this.scientist.anims.play('jump');
         }
 
@@ -228,20 +255,17 @@ class Forest extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
-
-        // checks hits on ob01, resets on hit
         if(this.checkCollision(this.scientist, this.ob01)) {
-            console.log("ob01 hit")
             this.timesHit++;
             this.ob01.alpha = 0;
             this.ob01.destroy();
-            this.recreate(this.ob01);
+            this.obstacleOnscreen = false;
+            this.ob01 = this.physics.add.image(game.config.width + 20, 240, 'ob01').setOrigin(0,0);
         // checks hits on ob01, resets on miss
-        } else if (this.ob01.x < -300){
-            console.log("ob01 miss")
+        } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
             this.ob01.alpha = 0;
             this.ob01.destroy();
-            this.recreate(this.ob01);
+            this.obstacleOnscreen = false;
         }
 
         // checks hits on ob02, resets on hit
@@ -249,14 +273,13 @@ class Forest extends Phaser.Scene {
             this.timesHit++;
             this.ob02.alpha = 0;
             this.ob02.destroy();
-            this.recreate(this.ob02);
-            console.log("ob02 hit")
+            this.obstacleOnscreen = false;
+            this.ob02 = this.physics.add.image(game.config.width + 20, 100, 'ob02').setOrigin(0,0);
         // checks hits on ob02, resets on miss
-        } else if (this.ob02.x < -300){
+        } else if (this.obstacleOnscreen && this.ob02.x < -300){
             this.ob02.alpha = 0;
             this.ob02.destroy();
-            this.recreate(this.ob02);
-            console.log("ob02 miss")
+            this.obstacleOnscreen = false;
         }
 
         // checks hits on ob03, resets on hit
@@ -264,14 +287,13 @@ class Forest extends Phaser.Scene {
             this.timesHit++;
             this.ob03.alpha = 0;
             this.ob03.destroy();
-            this.recreate(this.ob03);
-            console.log("ob03 hit")
+            this.obstacleOnscreen = false;
+            this.ob03 = this.physics.add.image(game.config.width + 20, 300, 'ob03').setOrigin(0,0);
         // checks hits on ob03, resets on miss
-        } else if (this.ob03.x < -300){
+        } else if (this.obstacleOnscreen && this.ob03.x < -300){
             this.ob03.alpha = 0;
             this.ob03.destroy();
-            this.recreate(this.ob03);
-            console.log("ob03 miss")
+            this.obstacleOnscreen = false;
         }
 
         // checks hits on ob04, resets on hit
@@ -279,17 +301,19 @@ class Forest extends Phaser.Scene {
             this.timesHit++;
             this.ob04.alpha = 0;
             this.ob04.destroy();
-            this.recreate(this.ob04);
-            console.log("ob04 hit")
+            this.obstacleOnscreen = false;
+            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
         // checks hits on ob04, resets on miss
-        } else if (this.ob04.x < -300){
+        } else if (this.obstacleOnscreen && this.ob04.x < -300){
             this.ob04.alpha = 0;
             this.ob04.destroy();
-            this.recreate(this.ob04);
-            console.log("ob04 miss")
+            this.obstacleOnscreen = false;
         }
-       
+
         if(this.timesHit >= 2){
+            //pause timer, save time to score
+            this.timer.paused = true;
+            this.score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
             this.gameOver = true;
             this.scene.start("endScene");
         }
@@ -297,31 +321,35 @@ class Forest extends Phaser.Scene {
 
     recreate(object) {
         if(object == this.ob01){
-            this.ob01 = this.physics.add.image(game.config.width + 20, 240, 'ob01').setOrigin(0,0);
+            this.ob01 = this.physics.add.image(game.config.width, 240, 'ob01').setOrigin(0,0);
             this.ob01.setSize(200, 300, true);
             this.ob01.setOffset(0, 50);
             this.ob01.body.setAllowGravity(false);
+            this.ob01.setVelocity(-900, 0);
         }
 
         if(object == this.ob02){
-            this.ob02 = this.physics.add.image(game.config.width + 20, 100, 'ob02').setOrigin(0,0);
+            this.ob02 = this.physics.add.image(game.config.width, 100, 'ob02').setOrigin(0,0);
             this.ob02.setSize(200, 170, true);
             this.ob02.setOffset(0, 200);
             this.ob02.body.setAllowGravity(false);
+            this.ob02.setVelocity(-900, 0);
         }
         
         if(object == this.ob03){
-            this.ob03 = this.physics.add.image(game.config.width + 20, 300, 'ob03').setOrigin(0,0);
+            this.ob03 = this.physics.add.image(game.config.width, 300, 'ob03').setOrigin(0,0);
             this.ob03.setSize(250, 150, true);
             this.ob03.setOffset(50, 20);
             this.ob03.body.setAllowGravity(false);
+            this.ob03.setVelocity(-900, 0);
         }
 
         if(object == this.ob04){
-            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+            this.ob04 = this.physics.add.image(game.config.width, -10, 'ob04').setOrigin(0,0);
             this.ob04.setSize(250, 200, true);
             this.ob04.setOffset(50, 20);
             this.ob04.body.setAllowGravity(false);
+            this.ob04.setVelocity(-900, 0);
         }
     }
 

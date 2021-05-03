@@ -1,16 +1,16 @@
-class Menu extends Phaser.Scene {
+class Level2 extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("level2Scene");
     }
 
     preload(){
         // load assets
-        this.load.image('menu', './assets/menu.png');
+        this.load.image('level2', './assets/level2.png');
     }
 
     create() {
-        // title
-        this.title = this.add.tileSprite(0, 0, 3840, 480, 'menu').setOrigin(0, 0);
+        
+        this.title = this.add.tileSprite(0, 0, 3840, 480, 'level2').setOrigin(0, 0);
 
         // borders
         this.add.rectangle(0, 0, 10, game.config.height, 0x5e5e5e).setOrigin(0, 0);
@@ -26,18 +26,11 @@ class Menu extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-          game.settings = {
-              obSpeed: 15,
-          }  
-          this.scene.start("labScene");  
-        }
-
-        //will remove this, kept for now to test
-        if (Phaser.Input.Keyboard.JustDown(keyA)) {
             game.settings = {
               obSpeed: 20,   
             }
-            this.scene.start("level2Scene");  
+            //this.sound.play('sfx_beep');  
+            this.scene.start("forestScene");  
         }
     }
 }
