@@ -13,6 +13,7 @@ class Lab extends Phaser.Scene {
         this.load.image('ob01', './assets/body.png');
         this.load.image('ob02', './assets/mummy.png');
         this.load.image('ob03', './assets/light.png');
+        this.load.image('exit', './assets/doorway.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
@@ -186,7 +187,7 @@ class Lab extends Phaser.Scene {
             this.obstacleOnscreen = false;
         }
 
-        if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1))
+        if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1) && (Math.floor(this.timer.getElapsedSeconds() * 10) <= 60))
         {
             var value = Phaser.Math.Between(1, 4);
 
@@ -261,62 +262,65 @@ class Lab extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions
         // checks hits on ob01, resets on hit
-        if(this.checkCollision(this.scientist, this.ob01)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.ob01.alpha = 0;
-            this.ob01.destroy();
-            this.obstacleOnscreen = false;
-            this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
-        // checks hits on ob01, resets on miss
-        } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
-            this.ob01.alpha = 0;
-            this.ob01.destroy();
-            this.obstacleOnscreen = false;
-        }
+        if ((Math.floor(this.timer.getElapsedSeconds() * 10) <= 65))
+        {
+            if(this.checkCollision(this.scientist, this.ob01)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.ob01.alpha = 0;
+                this.ob01.destroy();
+                this.obstacleOnscreen = false;
+                this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
+            // checks hits on ob01, resets on miss
+            } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
+                this.ob01.alpha = 0;
+                this.ob01.destroy();
+                this.obstacleOnscreen = false;
+            }
 
-        // checks hits on ob02, resets on hit
-        if(this.checkCollision(this.scientist, this.ob02)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.ob02.alpha = 0;
-            this.ob02.destroy();
-            this.obstacleOnscreen = false;
-            this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
-        // checks hits on ob02, resets on miss
-        } else if (this.obstacleOnscreen && this.ob02.x < -300){
-            this.ob02.alpha = 0;
-            this.ob02.destroy();
-            this.obstacleOnscreen = false;
-        }
+            // checks hits on ob02, resets on hit
+            if(this.checkCollision(this.scientist, this.ob02)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.ob02.alpha = 0;
+                this.ob02.destroy();
+                this.obstacleOnscreen = false;
+                this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
+            // checks hits on ob02, resets on miss
+            } else if (this.obstacleOnscreen && this.ob02.x < -300){
+                this.ob02.alpha = 0;
+                this.ob02.destroy();
+                this.obstacleOnscreen = false;
+            }
 
-        // checks hits on ob03, resets on hit
-        if(this.checkCollision(this.scientist, this.ob03)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.ob03.alpha = 0;
-            this.ob03.destroy();
-            this.obstacleOnscreen = false;
-            this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
-        // checks hits on ob03, resets on miss
-        } else if (this.obstacleOnscreen && this.ob03.x < -300){
-            this.ob03.alpha = 0;
-            this.ob03.destroy();
-            this.obstacleOnscreen = false;
-        }
+            // checks hits on ob03, resets on hit
+            if(this.checkCollision(this.scientist, this.ob03)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.ob03.alpha = 0;
+                this.ob03.destroy();
+                this.obstacleOnscreen = false;
+                this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
+            // checks hits on ob03, resets on miss
+            } else if (this.obstacleOnscreen && this.ob03.x < -300){
+                this.ob03.alpha = 0;
+                this.ob03.destroy();
+                this.obstacleOnscreen = false;
+            }
 
-        // checks hits on ob04, resets on hit
-        if(this.checkCollision(this.scientist, this.ob04)) {
-            this.timesHit++;
-            this.ob04.alpha = 0;
-            this.ob04.destroy();
-            this.obstacleOnscreen = false;
-            this.ob04 = this.physics.add.sprite(game.config.width + 20, -10, 'spiderClimb').setOrigin(0,0);
-        // checks hits on ob04, resets on miss
-        } else if (this.obstacleOnscreen && this.ob04.x < -300){
-            this.ob04.alpha = 0;
-            this.ob04.destroy();
-            this.obstacleOnscreen = false;
+            // checks hits on ob04, resets on hit
+            if(this.checkCollision(this.scientist, this.ob04)) {
+                this.timesHit++;
+                this.ob04.alpha = 0;
+                this.ob04.destroy();
+                this.obstacleOnscreen = false;
+                this.ob04 = this.physics.add.sprite(game.config.width + 20, -10, 'spiderClimb').setOrigin(0,0);
+            // checks hits on ob04, resets on miss
+            } else if (this.obstacleOnscreen && this.ob04.x < -300){
+                this.ob04.alpha = 0;
+                this.ob04.destroy();
+                this.obstacleOnscreen = false;
+            }
         }
 
         if(this.timesHit >= 2){
@@ -327,12 +331,24 @@ class Lab extends Phaser.Scene {
             this.scene.start("endScene");
         }
 
-        // will change the 10 to 90 after testing
-        if((Math.floor(this.timer.getElapsedSeconds() * 10) > 90))
+        // Level 2 transition
+        if((Math.floor(this.timer.getElapsedSeconds() * 10) > 60))
         {
-            this.timer.paused = true;
-            this.gameOver = true;
-            this.scene.start("level2Scene");
+            // Obstacles stop sending after 60 seconds
+
+            // Doorway appears after 65 seconds
+            if((Math.floor(this.timer.getElapsedSeconds() * 10) > 65))
+            { 
+                this.exit = this.add.image(1400, 10, 'exit').setOrigin(0,0);
+                this.scientist.setCollideWorldBounds(false);
+                this.scientist.setVelocity(400, 0);
+                this.gameOver = true;
+                
+                // Level 2 starts after 70 seconds
+                if((this.gameOver == true) && (Math.floor(this.timer.getElapsedSeconds() * 10) > 70)){
+                    this.scene.start("level2Scene");
+                }
+            }
         }
     }
 
