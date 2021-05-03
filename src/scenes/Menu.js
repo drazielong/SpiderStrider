@@ -6,8 +6,8 @@ class Menu extends Phaser.Scene {
     preload(){
         // load assets
         this.load.image('menu', './assets/menu.png');
-        this.load.audio('possible_spider', '.assets/possible_spider.wav');
-        this.load.audio('hit', '.assets/Hit_Hurt.wav');
+        this.load.audio('possible_spider', './assets/possible_spider.wav');
+        this.load.audio('hit', './assets/Hit_Hurt.wav');
     }
 
     create() {
