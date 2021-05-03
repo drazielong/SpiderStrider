@@ -30,7 +30,7 @@ class Forest extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 3840, 480, 'background').setOrigin(0, 0); 
         this.midground = this.add.tileSprite(0, 0, 3840, 480, 'midground').setOrigin(0, 0); 
         this.foreground = this.add.tileSprite(0, 0, 3840, 480, 'foreground').setOrigin(0, 0); 
-        //this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
+        this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
 
         // this acts as an invisible box so that the player doesnt get pushed off screen
         this.pH = this.physics.add.image(-100, 470, 'pH').setOrigin(0,0);
