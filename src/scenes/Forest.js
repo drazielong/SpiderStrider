@@ -23,7 +23,7 @@ class Forest extends Phaser.Scene {
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
         this.load.spritesheet('spiderClimb', './assets/topSpiderSpritesheet.png', {frameWidth: 330, frameHeight: 254, startFrame: 0, endFrame: 7});
-    
+        this.load.spritesheet('spiderDrop', './assets/swingingSpritesheet.png', {frameWidth: 160, frameHeight: 300, startFrame: 0, endFrame: 7});
     }
 
     create() {
@@ -98,6 +98,11 @@ class Forest extends Phaser.Scene {
         this.obs04.setOffset(10, 20);
         this.obs04.body.setAllowGravity(false);
         //this.obs04.anims.play('spiderClimb');
+
+        this.obs05 = this.physics.add.image(game.config.width + 20, -20, 'spiderDrop').setOrigin(0,0);
+        this.obs05.setSize(100, 300, true);
+        this.obs05.setOffset(0, 0);
+        this.obs05.body.setAllowGravity(false);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add player
@@ -183,7 +188,7 @@ class Forest extends Phaser.Scene {
         this.pH.setVelocity(0, 0);
         
         // check if on screen
-        if((this.obs01.x >= 0 && this.obs01.x <= game.config.width + 19) || (this.obs02.x >= 0 && this.obs02.x <= game.config.width + 19) || (this.obs03.x >= 0 && this.obs03.x <= game.config.width + 19) || (this.obs04.x >= 0 && this.obs04.x <= game.config.width + 19))
+        if((this.obs01.x >= 0 && this.obs01.x <= game.config.width + 19) || (this.obs02.x >= 0 && this.obs02.x <= game.config.width + 19) || (this.obs03.x >= 0 && this.obs03.x <= game.config.width + 19) || (this.obs04.x >= 0 && this.obs04.x <= game.config.width + 19) || (this.obs05.x >= 0 && this.obs05.x <= game.config.width + 19))
         {
             this.obstacleOnscreen = true;
         } else {
@@ -193,8 +198,8 @@ class Forest extends Phaser.Scene {
         // if !onScreen then send obstacle
         if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1))
         {
-            //var value = Phaser.Math.Between(1, 4);
-            var value = 4;
+            //var value = Phaser.Math.Between(1, 5);
+            var value = 5;
 
             if(value == 1) {
                 this.recreate(this.obs01);
@@ -213,6 +218,11 @@ class Forest extends Phaser.Scene {
 
             if(value == 4) {
                 this.recreate(this.obs04);
+                this.obstacleOnscreen = true;
+            }
+
+            if(value == 5) {
+                this.recreate(this.obs05);
                 this.obstacleOnscreen = true;
             }
         }
@@ -318,6 +328,20 @@ class Forest extends Phaser.Scene {
             this.obstacleOnscreen = false;
         }
 
+        // checks hits on obs05, resets on hit
+        if(this.checkCollision(this.scientist, this.obs05)) {
+            this.timesHit++;
+            this.obs05.alpha = 0;
+            this.obs05.destroy();
+            this.obstacleOnscreen = false;
+            this.obs05 = this.physics.add.image(game.config.width + 20, -10, 'spiderDrop').setOrigin(0,0);
+        // checks hits on obs05, resets on miss
+        } else if (this.obstacleOnscreen && this.obs05.x < -300){
+            this.obs05.alpha = 0;
+            this.obs05.destroy();
+            this.obstacleOnscreen = false;
+        }
+
         if(this.timesHit >= 2){
             //pause timer, save time to score
             this.timer.paused = true;
@@ -359,6 +383,15 @@ class Forest extends Phaser.Scene {
             this.obs04.body.setAllowGravity(false);
             this.obs04.setVelocity(-900, 0);
             //this.obs04.anims.play('spiderClimb');
+        }
+
+        if(object == this.obs05){
+            this.obs05 = this.physics.add.image(game.config.width, -20, 'spiderDrop').setOrigin(0,0);
+            this.obs05.setSize(100, 300, true);
+            this.obs05.setOffset(50, 20);
+            this.obs05.body.setAllowGravity(false);
+            this.obs05.setVelocity(-900, 0);
+            //this.obs05.anims.play('spiderClimb');
         }
     }
 
