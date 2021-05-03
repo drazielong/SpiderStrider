@@ -359,6 +359,7 @@ class Lab extends Phaser.Scene {
 
     checkCollision(scientist, object) {
         if(this.physics.collide(scientist, object)) {
+            this.sound.play('hit');
             return true;
         } else {
             return false;
