@@ -244,6 +244,7 @@ class Forest extends Phaser.Scene {
             this.scientist.body.setVelocityY(-600);
             this.scientist.setOffset(20, -20);
             this.scientist.setSize(150, 200);
+            this.sound.play('jumpsfx');
             this.scientist.anims.play('jump');
         }
 
@@ -255,6 +256,7 @@ class Forest extends Phaser.Scene {
 
         //sliding conditions
         if(!this.scientist.isJumping && !this.scientist.isSliding && this.scientist.body.blocked.down && keyS.isDown){
+            this.sound.play('slidesfx');
             this.scientist.isSliding = true;
             this.scientist.isRunning = false;
         }
