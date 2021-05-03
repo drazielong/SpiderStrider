@@ -224,6 +224,7 @@ class Forest extends Phaser.Scene {
             this.scientist.body.setVelocityY(-600);
             this.scientist.setOffset(20, -20);
             this.scientist.setSize(150, 200);
+            this.sound.play('jumpsfx');
             this.scientist.anims.play('jump');
         }
 
@@ -250,6 +251,7 @@ class Forest extends Phaser.Scene {
             this.scientist.setOffset(0, 175);
             //this is just a single image since the anim will replay as long as you hold the S button
             //If we want the sliding animations to play later, I can do what i did for the jumping anim but slightly different
+            this.sound.play('slidesfx');
             this.scientist.anims.play('slide'); 
         }
         

@@ -15,6 +15,7 @@ class Lab extends Phaser.Scene {
         this.load.image('ob03', './assets/light.png');
         this.load.image('ob04', './assets/topOb.png');
 
+
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
@@ -220,6 +221,7 @@ class Lab extends Phaser.Scene {
             this.scientist.body.setVelocityY(-350);
             this.scientist.setOffset(20, -20);
             this.scientist.setSize(210, 200);
+            this.sound.play('jumpsfx');
             this.scientist.anims.play('jump');
         }
 
@@ -244,6 +246,7 @@ class Lab extends Phaser.Scene {
             this.scientist.isRunning = false;
             this.scientist.setSize(200, 125);
             this.scientist.setOffset(0, 175);
+            this.sound.play('slidesfx');
             this.scientist.anims.play('slide'); 
         }
         
