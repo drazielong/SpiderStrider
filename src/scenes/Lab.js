@@ -13,14 +13,13 @@ class Lab extends Phaser.Scene {
         this.load.image('ob01', './assets/body.png');
         this.load.image('ob02', './assets/mummy.png');
         this.load.image('ob03', './assets/light.png');
-        this.load.image('ob04', './assets/topOb.png');
-
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('spiderClimb', './assets/topSpiderSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
     }
 
     create() {
@@ -34,30 +33,6 @@ class Lab extends Phaser.Scene {
         this.pH.setSize(370, 480, true);
         this.pH.setOffset(120, 0);
         this.pH.setCollideWorldBounds(true);
-        
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // add obstacles
-        this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
-        this.ob01.setSize(200, 100, true);
-        this.ob01.setOffset(50, 10);
-        this.ob01.body.setAllowGravity(false);
-
-        this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
-        this.ob02.setSize(100, 150, true);
-        this.ob02.setOffset(50, 10);
-        this.ob02.body.setAllowGravity(false);
-
-        this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
-        this.ob03.setSize(300, 150, true);
-        this.ob03.setOffset(0, 350);
-        this.ob03.body.setAllowGravity(false);
-
-        this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
-        this.ob04.setSize(250, 200, true);
-        this.ob04.setOffset(50, 20);
-        this.ob04.body.setAllowGravity(false);
-
-        this.obstacleOnscreen = false;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config
@@ -87,6 +62,38 @@ class Lab extends Phaser.Scene {
             frameRate: 12,
             repeat: -1
         });
+
+        this.anims.create({
+            key: 'spiderClimb',
+            frames: this.anims.generateFrameNumbers('spiderClimb', { start: 7, end: 0, first: 7}),
+            frameRate: 12,
+            repeat: -1
+        });
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // add obstacles
+        this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
+        this.ob01.setSize(200, 100, true);
+        this.ob01.setOffset(50, 10);
+        this.ob01.body.setAllowGravity(false);
+
+        this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
+        this.ob02.setSize(100, 150, true);
+        this.ob02.setOffset(50, 10);
+        this.ob02.body.setAllowGravity(false);
+
+        this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
+        this.ob03.setSize(300, 150, true);
+        this.ob03.setOffset(0, 350);
+        this.ob03.body.setAllowGravity(false);
+
+        this.ob04 = this.physics.add.sprite(game.config.width + 20, -10, 'spiderClimb').setOrigin(0,0);
+        this.ob04.setSize(250, 200, true);
+        this.ob04.setOffset(50, 20);
+        this.ob04.body.setAllowGravity(false);
+        this.ob04.anims.play('spiderClimb');
+
+        this.obstacleOnscreen = false;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add player
@@ -256,6 +263,7 @@ class Lab extends Phaser.Scene {
         // checks hits on ob01, resets on hit
         if(this.checkCollision(this.scientist, this.ob01)) {
             this.timesHit++;
+            this.cameras.main.shake(200);
             this.ob01.alpha = 0;
             this.ob01.destroy();
             this.obstacleOnscreen = false;
@@ -270,6 +278,7 @@ class Lab extends Phaser.Scene {
         // checks hits on ob02, resets on hit
         if(this.checkCollision(this.scientist, this.ob02)) {
             this.timesHit++;
+            this.cameras.main.shake(200);
             this.ob02.alpha = 0;
             this.ob02.destroy();
             this.obstacleOnscreen = false;
@@ -284,6 +293,7 @@ class Lab extends Phaser.Scene {
         // checks hits on ob03, resets on hit
         if(this.checkCollision(this.scientist, this.ob03)) {
             this.timesHit++;
+            this.cameras.main.shake(200);
             this.ob03.alpha = 0;
             this.ob03.destroy();
             this.obstacleOnscreen = false;
@@ -301,7 +311,7 @@ class Lab extends Phaser.Scene {
             this.ob04.alpha = 0;
             this.ob04.destroy();
             this.obstacleOnscreen = false;
-            this.ob04 = this.physics.add.image(game.config.width + 20, -10, 'ob04').setOrigin(0,0);
+            this.ob04 = this.physics.add.sprite(game.config.width + 20, -10, 'spiderClimb').setOrigin(0,0);
         // checks hits on ob04, resets on miss
         } else if (this.obstacleOnscreen && this.ob04.x < -300){
             this.ob04.alpha = 0;
@@ -353,11 +363,12 @@ class Lab extends Phaser.Scene {
         }
 
         if(object == this.ob04){
-            this.ob04 = this.physics.add.image(game.config.width, -10, 'ob04').setOrigin(0,0);
+            this.ob04 = this.physics.add.sprite(game.config.width, -10, 'spiderClimb').setOrigin(0,0);
             this.ob04.setSize(250, 200, true);
             this.ob04.setOffset(50, 20);
             this.ob04.body.setAllowGravity(false);
             this.ob04.setVelocity(-500, 0);
+            this.ob04.anims.play('spiderClimb');
         }
     }
 
