@@ -98,7 +98,7 @@ class Lab extends Phaser.Scene {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add player
-        this.scientist = this.physics.add.sprite(500, 480,'run').setOrigin(0.25, 0);
+        this.scientist = this.physics.add.sprite(550, 480,'run').setOrigin(0.25, 0);
         this.scientist.setSize(200,280);
         this.scientist.setOffset(20, 0);
         this.scientist.anims.play('run');
