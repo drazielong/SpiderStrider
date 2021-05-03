@@ -318,7 +318,7 @@ class Lab extends Phaser.Scene {
         }
 
         // will change the 10 to 90 after testing
-        if((Math.floor(this.timer.getElapsedSeconds() * 10) > 10))
+        if((Math.floor(this.timer.getElapsedSeconds() * 10) > 90))
         {
             this.timer.paused = true;
             this.gameOver = true;
