@@ -21,7 +21,7 @@ class Forest extends Phaser.Scene {
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
-        this.load.spritesheet('spiderClimb', './assets/topSpiderSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
+        this.load.spritesheet('spiderClimb', './assets/topForestSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
         this.load.spritesheet('spiderDrop', './assets/swingingSpritesheet.png', {frameWidth: 160, frameHeight: 330, startFrame: 0, endFrame: 7});
     }
 
@@ -204,8 +204,7 @@ class Forest extends Phaser.Scene {
         // if !onScreen then send obstacle
         if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1))
         {
-            //var value = Phaser.Math.Between(1, 5);
-            var value = 1;
+            var value = Phaser.Math.Between(1, 5);
 
             if(value == 1) {
                 this.recreate(this.obs01);

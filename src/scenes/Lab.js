@@ -19,7 +19,7 @@ class Lab extends Phaser.Scene {
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
-        this.load.spritesheet('spiderClimb', './assets/topSpiderSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
+        this.load.spritesheet('spiderClimb', './assets/topLabSpritesheet.png', {frameWidth: 375.5, frameHeight: 254, startFrame: 7, endFrame: 0});
     }
 
     create() {
