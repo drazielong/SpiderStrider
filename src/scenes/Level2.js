@@ -30,8 +30,8 @@ class Level2 extends Phaser.Scene {
             game.settings = {
               obSpeed: 20,   
             }
-            //this.sound.play('sfx_beep');  
             this.menuBGM.stop();
+            this.sound.play('possible_spider');
             this.scene.start("forestScene");  
         }
     }

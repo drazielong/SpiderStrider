@@ -36,12 +36,13 @@ class Menu extends Phaser.Scene {
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
-          game.settings = {
+            game.settings = {
               obSpeed: 15,
-          }  
-          this.menuBGM.stop();
-          this.sound.play('possible_spider');
-          this.scene.start("labScene");  
+            }  
+            
+            this.menuBGM.stop();
+            this.sound.play('possible_spider');
+            this.scene.start("labScene");  
         }
 
         //will remove this, kept for now to test

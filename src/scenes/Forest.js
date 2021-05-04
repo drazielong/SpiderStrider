@@ -8,7 +8,7 @@ class Forest extends Phaser.Scene {
         this.load.image('background', './assets/forestBackground.png');
         this.load.image('midground', './assets/forestMidground.png');
         this.load.image('foreground', './assets/forestForeground.png');
-        this.load.image('vignette', './assets/vignette.png');
+        this.load.image('vignette2', './assets/vignette2.png');
 
         // obstacles
         this.load.image('obs01', './assets/log.png');
@@ -28,12 +28,17 @@ class Forest extends Phaser.Scene {
 
     create() {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // background music 
         this.playBGM = this.sound.add('bgm', {volume: 0.4, loop: true});
         this.playBGM.play();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // parallax scrolling background
         this.background = this.add.tileSprite(0, 0, 3840, 480, 'background').setOrigin(0, 0); 
         this.midground = this.add.tileSprite(0, 0, 3840, 480, 'midground').setOrigin(0, 0); 
         this.foreground = this.add.tileSprite(0, 0, 3840, 480, 'foreground').setOrigin(0, 0); 
+
+        this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette2').setOrigin(0, 0); 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // animation config

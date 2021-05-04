@@ -149,14 +149,12 @@ class Lab extends Phaser.Scene {
             delay: 10000000000, //time cap 
             loop: false,
             startAt: 0,
-            timeScale: 0.12, //i think this is the closest i could get to making it look like normal seconds on my pc, might not be the same for everyone
+            timeScale: 0.12, 
             paused: false
         })
 
         //set text for timer
         this.timerText = this.add.text(borderUISize + borderPadding * 20, borderUISize + borderPadding * 2, 'Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10), timeConfig);
-        //reserve score?
-        let score = ('Your Time: ' + Math.floor(this.timer.getElapsedSeconds() * 10));
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // borders
@@ -258,7 +256,6 @@ class Lab extends Phaser.Scene {
             this.scientist.isRunning = false;
             this.scientist.setSize(200, 125);
             this.scientist.setOffset(0, 175);
-            //this.sound.play('slidesfx');
             this.scientist.anims.play('slide'); 
         }
         
@@ -274,7 +271,6 @@ class Lab extends Phaser.Scene {
                 this.ob01.destroy();
                 this.obstacleOnscreen = false;
                 this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
-            // checks hits on ob01, resets on miss
             } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
                 this.ob01.alpha = 0;
                 this.ob01.destroy();
@@ -289,7 +285,6 @@ class Lab extends Phaser.Scene {
                 this.ob02.destroy();
                 this.obstacleOnscreen = false;
                 this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
-            // checks hits on ob02, resets on miss
             } else if (this.obstacleOnscreen && this.ob02.x < -300){
                 this.ob02.alpha = 0;
                 this.ob02.destroy();
@@ -304,7 +299,6 @@ class Lab extends Phaser.Scene {
                 this.ob03.destroy();
                 this.obstacleOnscreen = false;
                 this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
-            // checks hits on ob03, resets on miss
             } else if (this.obstacleOnscreen && this.ob03.x < -300){
                 this.ob03.alpha = 0;
                 this.ob03.destroy();
@@ -318,7 +312,6 @@ class Lab extends Phaser.Scene {
                 this.ob04.destroy();
                 this.obstacleOnscreen = false;
                 this.ob04 = this.physics.add.sprite(game.config.width + 20, -10, 'spiderClimb').setOrigin(0,0);
-            // checks hits on ob04, resets on miss
             } else if (this.obstacleOnscreen && this.ob04.x < -300){
                 this.ob04.alpha = 0;
                 this.ob04.destroy();
@@ -357,7 +350,6 @@ class Lab extends Phaser.Scene {
     }
 
     recreate(object) {
-        //var placementValue = Phaser.Math.Between(100, 600);
         if(object == this.ob01){
             this.ob01 = this.physics.add.image(game.config.width, 330, 'ob01').setOrigin(0,0)
             this.ob01.setSize(200, 100, true);
