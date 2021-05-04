@@ -317,18 +317,6 @@ class Forest extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
-
-        // in create: variable = 0
-        // if powerup is on
-        // variable = current time + 5
-        // if time > variable 
-        // continue
-        // have something that shows power up is active, add powerup sprite on right corner?
-        
-        if (this.powerHit == true && this.powerOnVar < (Math.floor(this.timer.getElapsedSeconds() * 10))){
-            //console.log("powerVarON: ", this.powerOnVar)
-            //console.log("time in: ", (Math.floor(this.timer.getElapsedSeconds() * 10)))
-        } 
         if (this.powerOnVar < (Math.floor(this.timer.getElapsedSeconds() * 10)) || this.powerHit == false) { 
             this.powerHit = false;
             //console.log("powerVarON: ", this.powerOnVar)
@@ -405,7 +393,7 @@ class Forest extends Phaser.Scene {
         }
 
         // checks hits on powerup, resets on hit
-        if(this.checkCollision(this.scientist, this.powerup)) {
+        if(this.checkPowerCollision(this.scientist, this.powerup)) {
             this.powerup.alpha = 0;
             this.powerup.destroy();
             this.powerOnScreen = false;
@@ -455,7 +443,7 @@ class Forest extends Phaser.Scene {
         }
 
         if(object == this.obs04){
-            this.obs04 = this.physics.add.sprite(game.config.width, -20, 'spiderClimb2').setOrigin(0,0);
+            this.obs04 = this.physics.add.sprite(game.config.width, - 20, 'spiderClimb2').setOrigin(0,0);
             this.obs04.setSize(250, 210, true);
             this.obs04.setOffset(50, 20);
             this.obs04.body.setAllowGravity(false);
@@ -484,14 +472,20 @@ class Forest extends Phaser.Scene {
     checkCollision(scientist, object) {
         if(this.physics.collide(scientist, object)) 
         {
-            // maybe add a different sfx for powerup?
-            if(object != this.powerup)
-            {
-                this.sound.play('hit');
-            } else {
-                this.sound.play('powersfx');
-            }
+            this.sound.play('hit');
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    checkPowerCollision(scientist, object) {
+        if (scientist.x < object.x + object.width && 
+            scientist.x + scientist.width > object.x && 
+            scientist.y < object.y + object.height &&
+            scientist.height + scientist.y > object. y) {
+                this.sound.play('powersfx');
+                return true;
         } else {
             return false;
         }
