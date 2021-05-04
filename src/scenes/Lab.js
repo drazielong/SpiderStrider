@@ -25,6 +25,9 @@ class Lab extends Phaser.Scene {
 
     create() {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        this.playBGM = this.sound.add('bgm', {volume: 0.4, loop: true});
+        this.playBGM.play();
+
         // place tile sprite
         this.lab = this.add.tileSprite(0, 0, 3840, 480, 'lab').setOrigin(0, 0); 
         this.vig = this.add.tileSprite(0, 0, 3840, 480, 'vignette').setOrigin(0, 0); 
@@ -327,6 +330,7 @@ class Lab extends Phaser.Scene {
             //pause timer, save time to score
             this.timer.paused = true;
             this.gameOver = true;
+            this.playBGM.stop();
             this.scene.start("endScene", { time: Math.floor(this.timer.getElapsedSeconds() * 10) });
         }
 
@@ -345,6 +349,7 @@ class Lab extends Phaser.Scene {
                 
                 // Level 2 starts after 70 seconds
                 if((this.gameOver == true) && (Math.floor(this.timer.getElapsedSeconds() * 10) > 70)){
+                    this.playBGM.stop();
                     this.scene.start("level2Scene");
                 }
             }

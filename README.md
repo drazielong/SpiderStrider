@@ -13,4 +13,8 @@ Completed on May 3, 2021.
 
 ### Visual Style
 We wanted the game to be a bit darker in tone and chose a topic that we find a bit scary (spiders!).
-Our game features all original hand drawn assets and animation as well as original music and sfx.
+Our game features all original hand drawn assets and animation as well as original menu music and sfx.
+
+Music during play from freesound.org and falls under creative commons.
+https://freesound.org/people/Satanen/sounds/317385/
+

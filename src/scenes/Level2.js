@@ -9,7 +9,8 @@ class Level2 extends Phaser.Scene {
     }
 
     create() {
-        
+        this.menuBGM = this.sound.add('menu_music', {volume: 0.4, loop: true});
+        this.menuBGM.play();
         this.title = this.add.tileSprite(0, 0, 3840, 480, 'level2').setOrigin(0, 0);
 
         // borders
@@ -30,6 +31,7 @@ class Level2 extends Phaser.Scene {
               obSpeed: 20,   
             }
             //this.sound.play('sfx_beep');  
+            this.menuBGM.stop();
             this.scene.start("forestScene");  
         }
     }

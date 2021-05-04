@@ -9,6 +9,9 @@ class End extends Phaser.Scene {
   }
 
   create(data) {
+    this.sound.play('possible_spider');
+    this.menuBGM = this.sound.add('menu_music', {volume: 0.4, loop: true});
+    this.menuBGM.play();
     this.title = this.add.tileSprite(0, 0, 3840, 480, 'gameover').setOrigin(0, 0);
 
     // borders
@@ -44,6 +47,7 @@ class End extends Phaser.Scene {
   update() {
     if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
       //this.sound.play('sfx_beep');  
+      this.menuBGM.stop();
       this.scene.start("menuScene");  
     }
   }
