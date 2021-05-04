@@ -494,6 +494,7 @@ class Forest extends Phaser.Scene {
             }
             return true;
         } else {
+            this.sound.play('powersfx');
             return false;
         }
     }
