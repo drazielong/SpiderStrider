@@ -235,7 +235,7 @@ class Forest extends Phaser.Scene {
             var value = Phaser.Math.Between(1, 5);
             
             if((Math.floor(this.timer.getElapsedSeconds() * 10) > (30*this.powerVar)-2) && (Math.floor(this.timer.getElapsedSeconds() * 10) < (30*this.powerVar)+2)) {
-                this.recreate(this.powerup);
+                //this.recreate(this.powerup);
                 this.obstacleOnscreen = true;
                 this.powerOnScreen = true;
                 this.powerVar += 1;
