@@ -4,13 +4,12 @@ class Obstacles extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
 
         // has to match scene speed
-        this.moveSpeed = game.settings.obSpeed;
+        this.moveSpeed = 20;
     }
 
     update() {
         // move obstacles left
         this.x -= this.moveSpeed;
-
         // wrap around from left edge to right edge
         if(this.x <= 0 - this.width) {
             this.reset();

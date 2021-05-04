@@ -141,6 +141,8 @@ class Forest extends Phaser.Scene {
         this.powerup.body.setAllowGravity(false);
         this.powerVar = 1;
         this.powerOnScreen = false;
+        this.powerOnVar = 0;
+        this.powerHit = false;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // define keys
@@ -235,7 +237,7 @@ class Forest extends Phaser.Scene {
             var value = Phaser.Math.Between(1, 5);
             
             if((Math.floor(this.timer.getElapsedSeconds() * 10) > (30*this.powerVar)-2) && (Math.floor(this.timer.getElapsedSeconds() * 10) < (30*this.powerVar)+2)) {
-                //this.recreate(this.powerup);
+                this.recreate(this.powerup);
                 this.obstacleOnscreen = true;
                 this.powerOnScreen = true;
                 this.powerVar += 1;
@@ -315,6 +317,7 @@ class Forest extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
+
         // in create: variable = 0
         // if powerup is on
         // variable = current time + 5
@@ -322,89 +325,104 @@ class Forest extends Phaser.Scene {
         // continue
         // have something that shows power up is active, add powerup sprite on right corner?
         
-        console.log("time: ", (Math.floor(this.timer.getElapsedSeconds() * 10)))
-        if(this.checkCollision(this.scientist, this.obs01)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.obs01.alpha = 0;
-            this.obs01.destroy();
-            this.obstacleOnscreen = false;
-            this.obs01 = this.physics.add.image(game.config.width + 20, 0, 'obs01').setOrigin(0,0);
-        } else if (this.obstacleOnscreen && this.obs01.x < -300){ 
-            this.obs01.alpha = 0;
-            this.obs01.destroy();
-            this.obstacleOnscreen = false;
-        }
+        if (this.powerHit == true && this.powerOnVar < (Math.floor(this.timer.getElapsedSeconds() * 10))){
+            //console.log("powerVarON: ", this.powerOnVar)
+            //console.log("time in: ", (Math.floor(this.timer.getElapsedSeconds() * 10)))
+        } 
+        if (this.powerOnVar < (Math.floor(this.timer.getElapsedSeconds() * 10)) || this.powerHit == false) { 
+            this.powerHit = false;
+            //console.log("powerVarON: ", this.powerOnVar)
+            //console.log("time in: ", (Math.floor(this.timer.getElapsedSeconds() * 10)))
 
-        // checks hits on obs02, resets on hit
-        if(this.checkCollision(this.scientist, this.obs02)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.obs02.alpha = 0;
-            this.obs02.destroy();
-            this.obstacleOnscreen = false;
-            this.obs02 = this.physics.add.image(game.config.width + 20, 100, 'obs02').setOrigin(0,0);
-        } else if (this.obstacleOnscreen && this.obs02.x < -300){
-            this.obs02.alpha = 0;
-            this.obs02.destroy();
-            this.obstacleOnscreen = false;
-        }
+            if(this.checkCollision(this.scientist, this.obs01)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.obs01.alpha = 0;
+                this.obs01.destroy();
+                this.obstacleOnscreen = false;
+                this.obs01 = this.physics.add.image(game.config.width + 20, 0, 'obs01').setOrigin(0,0);
+            } else if (this.obstacleOnscreen && this.obs01.x < -300){ 
+                this.obs01.alpha = 0;
+                this.obs01.destroy();
+                this.obstacleOnscreen = false;
+            }
 
-        // checks hits on obs03, resets on hit
-        if(this.checkCollision(this.scientist, this.obs03)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.obs03.alpha = 0;
-            this.obs03.destroy();
-            this.obstacleOnscreen = false;
-            this.obs03 = this.physics.add.image(game.config.width + 20, 300, 'obs03').setOrigin(0,0);
-        } else if (this.obstacleOnscreen && this.obs03.x < -300){
-            this.obs03.alpha = 0;
-            this.obs03.destroy();
-            this.obstacleOnscreen = false;
-        }
+            // checks hits on obs02, resets on hit
+            if(this.checkCollision(this.scientist, this.obs02)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.obs02.alpha = 0;
+                this.obs02.destroy();
+                this.obstacleOnscreen = false;
+                this.obs02 = this.physics.add.image(game.config.width + 20, 100, 'obs02').setOrigin(0,0);
+            } else if (this.obstacleOnscreen && this.obs02.x < -300){
+                this.obs02.alpha = 0;
+                this.obs02.destroy();
+                this.obstacleOnscreen = false;
+            }
 
-        // checks hits on obs04, resets on hit
-        if(this.checkCollision(this.scientist, this.obs04)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.obs04.alpha = 0;
-            this.obs04.destroy();
-            this.obstacleOnscreen = false;
-            this.obs04 = this.physics.add.sprite(game.config.width + 100, -10, 'spiderClimb2').setOrigin(0,0);
-        } else if (this.obstacleOnscreen && this.obs04.x < -100){
-            this.obs04.alpha = 0;
-            this.obs04.destroy();
-            this.obstacleOnscreen = false;
-        }
+            // checks hits on obs03, resets on hit
+            if(this.checkCollision(this.scientist, this.obs03)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.obs03.alpha = 0;
+                this.obs03.destroy();
+                this.obstacleOnscreen = false;
+                this.obs03 = this.physics.add.image(game.config.width + 20, 300, 'obs03').setOrigin(0,0);
+            } else if (this.obstacleOnscreen && this.obs03.x < -300){
+                this.obs03.alpha = 0;
+                this.obs03.destroy();
+                this.obstacleOnscreen = false;
+            }
 
-        // checks hits on obs05, resets on hit
-        if(this.checkCollision(this.scientist, this.obs05)) {
-            this.timesHit++;
-            this.cameras.main.shake(200);
-            this.obs05.alpha = 0;
-            this.obs05.destroy();
-            this.obstacleOnscreen = false;
-            this.obs05 = this.physics.add.sprite(game.config.width + 20, 0, 'spiderDrop').setOrigin(0,0);
-        } else if (this.obstacleOnscreen && this.obs05.x < -300){
-            this.obs05.alpha = 0;
-            this.obs05.destroy();
-            this.obstacleOnscreen = false;
+            // checks hits on obs04, resets on hit
+            if(this.checkCollision(this.scientist, this.obs04)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.obs04.alpha = 0;
+                this.obs04.destroy();
+                this.obstacleOnscreen = false;
+                this.obs04 = this.physics.add.sprite(game.config.width + 100, -10, 'spiderClimb2').setOrigin(0,0);
+            } else if (this.obstacleOnscreen && this.obs04.x < -100){
+                this.obs04.alpha = 0;
+                this.obs04.destroy();
+                this.obstacleOnscreen = false;
+            }
+
+            // checks hits on obs05, resets on hit
+            if(this.checkCollision(this.scientist, this.obs05)) {
+                this.timesHit++;
+                this.cameras.main.shake(200);
+                this.obs05.alpha = 0;
+                this.obs05.destroy();
+                this.obstacleOnscreen = false;
+                this.obs05 = this.physics.add.sprite(game.config.width + 20, 0, 'spiderDrop').setOrigin(0,0);
+            } else if (this.obstacleOnscreen && this.obs05.x < -300){
+                this.obs05.alpha = 0;
+                this.obs05.destroy();
+                this.obstacleOnscreen = false;
+            }
         }
 
         // checks hits on powerup, resets on hit
         if(this.checkCollision(this.scientist, this.powerup)) {
+            console.log("hit")
             this.powerup.alpha = 0;
             this.powerup.destroy();
             this.powerOnScreen = false;
             this.obstacleOnscreen = false;
+            this.powerHit = true;
             this.powerup = this.physics.add.image(game.config.width + 20, 100, 'powerup').setOrigin(0,0);
+            this.powerOnVar = (Math.floor(this.timer.getElapsedSeconds() * 10)) + 5;
         } else if (this.obstacleOnscreen && this.powerup.x < -10){
+            console.log("miss")
             this.powerup.alpha = 0;
             this.powerup.destroy();
             this.powerOnScreen = false;
             this.obstacleOnscreen = false;
+            this.powerHit = false;
         }
+            //console.log("powerhit : ", this.powerHit)
 
         if(this.timesHit >= 2){
             //pause timer, save time to score
@@ -469,7 +487,6 @@ class Forest extends Phaser.Scene {
     checkCollision(scientist, object) {
         if(this.physics.collide(scientist, object)) 
         {
-
             // maybe add a different sfx for powerup?
             if(object != this.powerup)
             {
