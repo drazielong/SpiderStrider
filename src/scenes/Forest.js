@@ -122,6 +122,7 @@ class Forest extends Phaser.Scene {
         this.scientist.isRunning = false;
         this.scientist.isJumping = false;
         this.scientist.isSliding = false;
+        this.scientist.body.setGravityY(300);
         this.scientist.setCollideWorldBounds(true);
    
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
