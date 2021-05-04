@@ -406,7 +406,6 @@ class Forest extends Phaser.Scene {
 
         // checks hits on powerup, resets on hit
         if(this.checkCollision(this.scientist, this.powerup)) {
-            console.log("hit")
             this.powerup.alpha = 0;
             this.powerup.destroy();
             this.powerOnScreen = false;
@@ -415,14 +414,12 @@ class Forest extends Phaser.Scene {
             this.powerup = this.physics.add.image(game.config.width + 20, 100, 'powerup').setOrigin(0,0);
             this.powerOnVar = (Math.floor(this.timer.getElapsedSeconds() * 10)) + 5;
         } else if (this.obstacleOnscreen && this.powerup.x < -10){
-            console.log("miss")
             this.powerup.alpha = 0;
             this.powerup.destroy();
             this.powerOnScreen = false;
             this.obstacleOnscreen = false;
             this.powerHit = false;
         }
-            //console.log("powerhit : ", this.powerHit)
 
         if(this.timesHit >= 2){
             //pause timer, save time to score
@@ -491,10 +488,11 @@ class Forest extends Phaser.Scene {
             if(object != this.powerup)
             {
                 this.sound.play('hit');
+            } else {
+                this.sound.play('powersfx');
             }
             return true;
         } else {
-            this.sound.play('powersfx');
             return false;
         }
     }
