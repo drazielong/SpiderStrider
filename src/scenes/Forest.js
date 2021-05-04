@@ -28,6 +28,8 @@ class Forest extends Phaser.Scene {
 
     create() {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        this.playBGM = this.sound.add('bgm', {volume: 0.4, loop: true});
+        this.playBGM.play();
         // parallax scrolling background
         this.background = this.add.tileSprite(0, 0, 3840, 480, 'background').setOrigin(0, 0); 
         this.midground = this.add.tileSprite(0, 0, 3840, 480, 'midground').setOrigin(0, 0); 
@@ -423,6 +425,7 @@ class Forest extends Phaser.Scene {
 
         if(this.timesHit >= 2){
             //pause timer, save time to score
+            this.playBGM.stop();
             this.timer.paused = true;
             this.gameOver = true;
             this.scene.start("endScene", { time: Math.floor(this.timer.getElapsedSeconds() * 10) });
