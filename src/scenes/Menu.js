@@ -11,6 +11,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('menu_music', './assets/Slow piano and crawling.m4a');
         this.load.audio('jumpsfx', './assets/Jump_spider.wav');
         this.load.audio('slidesfx', './assets/Slide_spider.wav');
+        this.load.auido('powersfx', './assets/Powerup35.wav');
     }
 
     create() {
