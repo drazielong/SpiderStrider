@@ -7,6 +7,7 @@ Completed on May 5, 2021.
 
 ### Technically interesting aspects
 * Two levels with a transition between them
+* Level 2 has parallax scrolling
 * Speed increase after 115 seconds on level 2
 * Sliding mechanic along with jumping 
 * Changing hitbox sizes on input
