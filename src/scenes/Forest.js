@@ -227,10 +227,15 @@ class Forest extends Phaser.Scene {
         }
 
         // parallax scrolling
-        if ((Math.floor(this.timer.getElapsedSeconds() * 10) <= 90)) {
-        this.background.tilePositionX += 5;
-        this.midground.tilePositionX += 10;
-        this.foreground.tilePositionX += 20;
+        if ((Math.floor(this.timer.getElapsedSeconds() * 10) <= 115)) {
+            this.background.tilePositionX += 5;
+            this.midground.tilePositionX += 10;
+            this.foreground.tilePositionX += 20;
+        } else {
+            this.background.tilePositionX += 15;
+            this.midground.tilePositionX += 20;
+            this.foreground.tilePositionX += 30;
+            var overTime = false;;
         }
  
         // placeholder physics
@@ -312,7 +317,11 @@ class Forest extends Phaser.Scene {
         if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
-            this.scientist.body.setVelocityY(-600);
+            if(this.overTime == false){
+                this.scientist.body.setVelocityY(-600);
+            } else {
+                this.scientist.body.setVelocityY(-800);
+            }
             this.scientist.setOffset(20, -20);
             this.scientist.setSize(150, 200);
             this.sound.play('jumpsfx');
@@ -351,88 +360,89 @@ class Forest extends Phaser.Scene {
             if(this.scientist.alpha < 1){
                 this.scientist.alpha = 1;
             }
-            
-            if(this.checkCollision(this.scientist, this.obs01)) {
-                this.timesHit++;
-                this.cameras.main.shake(200);
-                this.obs01.alpha = 0;
-                this.obs01.destroy();
-                this.obstacleOnscreen = false;
-                this.obs01 = this.physics.add.image(game.config.width + 25, 0, 'obs01').setOrigin(0,0);
-            } else if (this.obstacleOnscreen && this.obs01.x < -300){ 
-                this.obs01.alpha = 0;
-                this.obs01.destroy();
-                this.obstacleOnscreen = false;
-            }
+            else{
+                if(this.checkCollision(this.scientist, this.obs01)) {
+                    this.timesHit++;
+                    this.cameras.main.shake(200);
+                    this.obs01.alpha = 0;
+                    this.obs01.destroy();
+                    this.obstacleOnscreen = false;
+                    this.obs01 = this.physics.add.image(game.config.width + 25, 0, 'obs01').setOrigin(0,0);
+                } else if (this.obstacleOnscreen && this.obs01.x < -300){ 
+                    this.obs01.alpha = 0;
+                    this.obs01.destroy();
+                    this.obstacleOnscreen = false;
+                }
 
-            // checks hits on obs02, resets on hit
-            if(this.checkCollision(this.scientist, this.obs02)) {
-                this.timesHit++;
-                this.cameras.main.shake(200);
-                this.obs02.alpha = 0;
-                this.obs02.destroy();
-                this.obstacleOnscreen = false;
-                this.obs02 = this.physics.add.image(game.config.width + 20, 100, 'obs02').setOrigin(0,0);
-            } else if (this.obstacleOnscreen && this.obs02.x < -300){
-                this.obs02.alpha = 0;
-                this.obs02.destroy();
-                this.obstacleOnscreen = false;
-            }
+                // checks hits on obs02, resets on hit
+                if(this.checkCollision(this.scientist, this.obs02)) {
+                    this.timesHit++;
+                    this.cameras.main.shake(200);
+                    this.obs02.alpha = 0;
+                    this.obs02.destroy();
+                    this.obstacleOnscreen = false;
+                    this.obs02 = this.physics.add.image(game.config.width + 20, 100, 'obs02').setOrigin(0,0);
+                } else if (this.obstacleOnscreen && this.obs02.x < -300){
+                    this.obs02.alpha = 0;
+                    this.obs02.destroy();
+                    this.obstacleOnscreen = false;
+                }
 
-            // checks hits on obs03, resets on hit
-            if(this.checkCollision(this.scientist, this.obs03)) {
-                this.timesHit++;
-                this.cameras.main.shake(200);
-                this.obs03.alpha = 0;
-                this.obs03.destroy();
-                this.obstacleOnscreen = false;
-                this.obs03 = this.physics.add.image(game.config.width + 20, 310, 'obs03').setOrigin(0,0);
-            } else if (this.obstacleOnscreen && this.obs03.x < -300){
-                this.obs03.alpha = 0;
-                this.obs03.destroy();
-                this.obstacleOnscreen = false;
-            }
+                // checks hits on obs03, resets on hit
+                if(this.checkCollision(this.scientist, this.obs03)) {
+                    this.timesHit++;
+                    this.cameras.main.shake(200);
+                    this.obs03.alpha = 0;
+                    this.obs03.destroy();
+                    this.obstacleOnscreen = false;
+                    this.obs03 = this.physics.add.image(game.config.width + 20, 310, 'obs03').setOrigin(0,0);
+                } else if (this.obstacleOnscreen && this.obs03.x < -300){
+                    this.obs03.alpha = 0;
+                    this.obs03.destroy();
+                    this.obstacleOnscreen = false;
+                }
 
-            // checks hits on obs04, resets on hit
-            if(this.checkCollision(this.scientist, this.obs04)) {
-                this.timesHit++;
-                this.cameras.main.shake(200);
-                this.obs04.alpha = 0;
-                this.obs04.destroy();
-                this.obstacleOnscreen = false;
-                this.obs04 = this.physics.add.sprite(game.config.width + 100, -10, 'redSpiderClimb').setOrigin(0,0);
-            } else if (this.obstacleOnscreen && this.obs04.x < -100){
-                this.obs04.alpha = 0;
-                this.obs04.destroy();
-                this.obstacleOnscreen = false;
-            }
+                // checks hits on obs04, resets on hit
+                if(this.checkCollision(this.scientist, this.obs04)) {
+                    this.timesHit++;
+                    this.cameras.main.shake(200);
+                    this.obs04.alpha = 0;
+                    this.obs04.destroy();
+                    this.obstacleOnscreen = false;
+                    this.obs04 = this.physics.add.sprite(game.config.width + 100, -10, 'redSpiderClimb').setOrigin(0,0);
+                } else if (this.obstacleOnscreen && this.obs04.x < -100){
+                    this.obs04.alpha = 0;
+                    this.obs04.destroy();
+                    this.obstacleOnscreen = false;
+                }
 
-            // checks hits on obs05, resets on hit
-            if(this.checkCollision(this.scientist, this.obs05)) {
-                this.timesHit++;
-                this.cameras.main.shake(200);
-                this.obs05.alpha = 0;
-                this.obs05.destroy();
-                this.obstacleOnscreen = false;
-                this.obs05 = this.physics.add.sprite(game.config.width + 20, 0, 'spiderDrop').setOrigin(0,0);
-            } else if (this.obstacleOnscreen && this.obs05.x < -300){
-                this.obs05.alpha = 0;
-                this.obs05.destroy();
-                this.obstacleOnscreen = false;
-            }
+                // checks hits on obs05, resets on hit
+                if(this.checkCollision(this.scientist, this.obs05)) {
+                    this.timesHit++;
+                    this.cameras.main.shake(200);
+                    this.obs05.alpha = 0;
+                    this.obs05.destroy();
+                    this.obstacleOnscreen = false;
+                    this.obs05 = this.physics.add.sprite(game.config.width + 20, 0, 'spiderDrop').setOrigin(0,0);
+                } else if (this.obstacleOnscreen && this.obs05.x < -300){
+                    this.obs05.alpha = 0;
+                    this.obs05.destroy();
+                    this.obstacleOnscreen = false;
+                }
 
-            // checks hits on obs06, resets on hit
-            if(this.checkCollision(this.scientist, this.obs06)) {
-                this.timesHit++;
-                this.cameras.main.shake(200);
-                this.obs06.alpha = 0;
-                this.obs06.destroy();
-                this.obstacleOnscreen = false;
-                this.obs06 = this.physics.add.sprite(game.config.width + 100, -10, 'blackSpiderClimb').setOrigin(0,0);
-            } else if (this.obstacleOnscreen && this.obs06.x < -100){
-                this.obs06.alpha = 0;
-                this.obs06.destroy();
-                this.obstacleOnscreen = false;
+                // checks hits on obs06, resets on hit
+                if(this.checkCollision(this.scientist, this.obs06)) {
+                    this.timesHit++;
+                    this.cameras.main.shake(200);
+                    this.obs06.alpha = 0;
+                    this.obs06.destroy();
+                    this.obstacleOnscreen = false;
+                    this.obs06 = this.physics.add.sprite(game.config.width + 100, -10, 'blackSpiderClimb').setOrigin(0,0);
+                } else if (this.obstacleOnscreen && this.obs06.x < -100){
+                    this.obs06.alpha = 0;
+                    this.obs06.destroy();
+                    this.obstacleOnscreen = false;
+                }
             }
         }
 
@@ -470,7 +480,11 @@ class Forest extends Phaser.Scene {
             this.obs01.setSize(125, 250, true);
             this.obs01.setOffset(25, 20);
             this.obs01.body.setAllowGravity(false);
-            this.obs01.setVelocity(-900, 0);
+            if(this.overTime == false){
+                this.obs01.setVelocity(-900, 0);
+            } else {
+                this.obs01.setVelocity(-1200, 0);
+            }
         }
 
         if(object == this.obs02){
@@ -478,7 +492,11 @@ class Forest extends Phaser.Scene {
             this.obs02.setSize(170, 200, true);
             this.obs02.setOffset(0, 175);
             this.obs02.body.setAllowGravity(false);
-            this.obs02.setVelocity(-900, 0);
+            if(this.overTime == false){
+                this.obs02.setVelocity(-900, 0);
+            } else {
+                this.obs02.setVelocity(-1200, 0);
+            }
         }
         
         if(object == this.obs03){
@@ -487,6 +505,11 @@ class Forest extends Phaser.Scene {
             this.obs03.setOffset(50, 20);
             this.obs03.body.setAllowGravity(false);
             this.obs03.setVelocity(-900, 0);
+            if(this.overTime == false){
+                this.obs03.setVelocity(-900, 0);
+            } else {
+                this.obs03.setVelocity(-1200, 0);
+            }
         }
 
         if(object == this.obs04){
@@ -494,8 +517,12 @@ class Forest extends Phaser.Scene {
             this.obs04.setSize(250, 210, true);
             this.obs04.setOffset(50, 20);
             this.obs04.body.setAllowGravity(false);
-            this.obs04.setVelocity(-900, 0);
             this.obs04.anims.play('redSpiderClimb');
+            if(this.overTime == false){
+                this.obs04.setVelocity(-900, 0);
+            } else {
+                this.obs04.setVelocity(-1200, 0);
+            }
         }
 
         if(object == this.obs05){
@@ -503,8 +530,12 @@ class Forest extends Phaser.Scene {
             this.obs05.setSize(100, 270, true);
             this.obs05.setOffset(0, 50);
             this.obs05.body.setAllowGravity(false);
-            this.obs05.setVelocity(-900, 0);
             this.obs05.anims.play('spiderDrop');
+            if(this.overTime == false){
+                this.obs05.setVelocity(-900, 0);
+            } else {
+                this.obs05.setVelocity(-1200, 0);
+            }
         }
 
         if(object == this.obs06){
@@ -512,8 +543,12 @@ class Forest extends Phaser.Scene {
             this.obs06.setSize(250, 210, true);
             this.obs06.setOffset(50, 20);
             this.obs06.body.setAllowGravity(false);
-            this.obs06.setVelocity(-900, 0);
             this.obs06.anims.play('blackSpiderClimb');
+            if(this.overTime == false){
+                this.obs06.setVelocity(-900, 0);
+            } else {
+                this.obs06.setVelocity(-1200, 0);
+            }
         }
 
         if(object == this.powerup){
@@ -521,8 +556,12 @@ class Forest extends Phaser.Scene {
             this.powerup.setSize(100, 100, true);
             this.powerup.setOffset(0, 0);
             this.powerup.body.setAllowGravity(false);
-            this.powerup.setVelocity(-1300, 0);
             this.powerup.anims.play('powerup');
+            if(this.overTime == false){
+                this.powerup.setVelocity(-1300, 0);
+            } else {
+                this.powerup.setVelocity(-1600, 0);
+            }
         }
 
     }
