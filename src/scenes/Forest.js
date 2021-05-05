@@ -22,8 +22,9 @@ class Forest extends Phaser.Scene {
         this.load.spritesheet('run', './assets/run_spritesheet.png', {frameWidth: 280, frameHeight: 280, startFrame: 0, endFrame: 11});
         this.load.spritesheet('jump', './assets/jump_spritesheet.png', {frameWidth: 280, frameHeight: 320, startFrame: 0, endFrame: 10});
         this.load.spritesheet('spiderRun', './assets/spiderrunSpritesheet.png', {frameWidth: 680, frameHeight: 480, startFrame: 0, endFrame: 7});
-        this.load.spritesheet('spiderClimb2', './assets/topForestSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
-        this.load.spritesheet('spiderDrop', './assets/swingingSpritesheet.png', {frameWidth: 160, frameHeight: 330, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('spiderClimb2', './assets/topForestSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 0, endFrame: 7});
+        this.load.spritesheet('bspiderClimb', './assets/topForestSpritesheet2.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
+        this.load.spritesheet('spiderDrop', './assets/swingingSpritesheet.png', {frameWidth: 160, frameHeight: 330, startFrame: 7, endFrame: 0});
     }
 
     create() {
@@ -71,7 +72,7 @@ class Forest extends Phaser.Scene {
 
         this.anims.create({
             key: 'spiderClimb2',
-            frames: this.anims.generateFrameNumbers('spiderClimb2', { start: 7, end: 0, first: 7}),
+            frames: this.anims.generateFrameNumbers('spiderClimb2', { start: 0, end: 6, first: 0}),
             frameRate: 16,
             repeat: -1
         });
@@ -86,17 +87,17 @@ class Forest extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
         this.obs01 = this.physics.add.image(game.config.width + 20, 270, 'obs01').setOrigin(0,0);
-        this.obs01.setSize(200, 300, true);
-        this.obs01.setOffset(0, 20);
+        this.obs01.setSize(125, 300, true);
+        this.obs01.setOffset(25, 250);
         this.obs01.body.setAllowGravity(false);
 
         this.obs02 = this.physics.add.image(game.config.width + 20, 120, 'obs02').setOrigin(0,0);
-        this.obs02.setSize(200, 190, true);
-        this.obs02.setOffset(0, 200);
+        this.obs02.setSize(170, 200, true);
+        this.obs02.setOffset(0, 175);
         this.obs02.body.setAllowGravity(false);
 
-        this.obs03 = this.physics.add.image(game.config.width + 20, 300, 'obs03').setOrigin(0,0);
-        this.obs03.setSize(250, 150, true);
+        this.obs03 = this.physics.add.image(game.config.width + 20, 310, 'obs03').setOrigin(0,0);
+        this.obs03.setSize(200, 150, true);
         this.obs03.setOffset(50, 20);
         this.obs03.body.setAllowGravity(false);
 
@@ -135,11 +136,6 @@ class Forest extends Phaser.Scene {
         this.pH.setSize(370, 480, true);
         this.pH.setOffset(120, 0);
         this.pH.setCollideWorldBounds(true);
-
-        this.pH2 = this.physics.add.image(-400, 470, 'pH').setOrigin(0,0);
-        this.pH2.setSize(400, 480, true);
-        this.pH2.setOffset(50, 0);
-        this.pH2.setCollideWorldBounds(true);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // powerup
@@ -218,9 +214,6 @@ class Forest extends Phaser.Scene {
         // placeholder physics
         this.physics.add.collider(this.scientist, this.pH);
         this.pH.setVelocity(0, 0);
-
-        this.physics.add.collider(this.scientist, this.pH2);
-        this.pH2.setVelocity(0, 0);
         
         // check if on screen
         if((this.obs01.x >= 0 && this.obs01.x <= game.config.width + 19) || (this.obs02.x >= 0 && this.obs02.x <= game.config.width + 19) || (this.obs03.x >= 0 && this.obs03.x <= game.config.width + 19) || (this.obs04.x >= 0 && this.obs04.x <= game.config.width + 19) || (this.obs05.x >= 0 && this.obs05.x <= game.config.width + 19))
@@ -324,10 +317,6 @@ class Forest extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
         if (this.powerOnVar < (Math.floor(this.timer.getElapsedSeconds() * 10)) || this.powerHit == false) { 
-            //this.powerHit = false;
-            //console.log("powerVarON: ", this.powerOnVar)
-            //console.log("time in: ", (Math.floor(this.timer.getElapsedSeconds() * 10)))
-
             if(this.checkCollision(this.scientist, this.obs01)) {
                 this.timesHit++;
                 this.cameras.main.shake(200);
@@ -362,7 +351,7 @@ class Forest extends Phaser.Scene {
                 this.obs03.alpha = 0;
                 this.obs03.destroy();
                 this.obstacleOnscreen = false;
-                this.obs03 = this.physics.add.image(game.config.width + 20, 300, 'obs03').setOrigin(0,0);
+                this.obs03 = this.physics.add.image(game.config.width + 20, 310, 'obs03').setOrigin(0,0);
             } else if (this.obstacleOnscreen && this.obs03.x < -300){
                 this.obs03.alpha = 0;
                 this.obs03.destroy();
@@ -427,23 +416,23 @@ class Forest extends Phaser.Scene {
     recreate(object) {
         if(object == this.obs01){
             this.obs01 = this.physics.add.image(game.config.width, 270, 'obs01').setOrigin(0,0);
-            this.obs01.setSize(200, 300, true);
-            this.obs01.setOffset(0, 20);
+            this.obs01.setSize(125, 250, true);
+            this.obs01.setOffset(25, 20);
             this.obs01.body.setAllowGravity(false);
             this.obs01.setVelocity(-900, 0);
         }
 
         if(object == this.obs02){
             this.obs02 = this.physics.add.image(game.config.width, 120, 'obs02').setOrigin(0,0);
-            this.obs02.setSize(200, 190, true);
-            this.obs02.setOffset(0, 200);
+            this.obs02.setSize(170, 200, true);
+            this.obs02.setOffset(0, 175);
             this.obs02.body.setAllowGravity(false);
             this.obs02.setVelocity(-900, 0);
         }
         
         if(object == this.obs03){
-            this.obs03 = this.physics.add.image(game.config.width, 300, 'obs03').setOrigin(0,0);
-            this.obs03.setSize(250, 150, true);
+            this.obs03 = this.physics.add.image(game.config.width, 310, 'obs03').setOrigin(0,0);
+            this.obs03.setSize(200, 150, true);
             this.obs03.setOffset(50, 20);
             this.obs03.body.setAllowGravity(false);
             this.obs03.setVelocity(-900, 0);
