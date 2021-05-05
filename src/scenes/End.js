@@ -28,6 +28,7 @@ class End extends Phaser.Scene {
     // no highScore  
     if(highScore  === null) 
     {  
+      console.log("no score")
       localStorage.setItem('highscore', data.time);    
       highScore = data.time;
       newHighScore = true;
@@ -38,6 +39,7 @@ class End extends Phaser.Scene {
       // new high score
       if(data.time > highScore)
       {
+        console.log("new high score")
         localStorage.setItem('hiscore', data.time);
         highScore = data.time;
         newHighScore = true;
@@ -45,6 +47,7 @@ class End extends Phaser.Scene {
       // no new high score
       else 
       {
+        console.log("no new high score")
         highScore = parseInt(localStorage.getItem('hiscore'));
         newHighScore = false;
       }

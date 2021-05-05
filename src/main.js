@@ -25,5 +25,5 @@ let borderPadding = borderUISize / 3;
 let keySPACE, keyW, keyA, keyS;
 
 // global variables
-let highScore;
+let highScore = 0;
 let newHighScore = false;
