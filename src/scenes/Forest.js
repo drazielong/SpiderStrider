@@ -65,7 +65,7 @@ class Forest extends Phaser.Scene {
         this.anims.create({
             key: 'spiderRun',
             frames: this.anims.generateFrameNumbers('spiderRun', { start: 0, end: 7, first: 0}),
-            frameRate: 10,
+            frameRate: 15,
             repeat: -1
         });
 
@@ -143,7 +143,7 @@ class Forest extends Phaser.Scene {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // powerup
-        this.powerup = this.physics.add.image(game.config.width + 20, 0, 'powerup').setOrigin(0,0);
+        this.powerup = this.physics.add.image(game.config.width + 40, 0, 'powerup').setOrigin(0,0);
         this.powerup.setSize(100, 100, true);
         this.powerup.setOffset(0, 0);
         this.powerup.body.setAllowGravity(false);
@@ -289,11 +289,13 @@ class Forest extends Phaser.Scene {
         if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
-            this.scientist.body.setVelocityY(-600);
+            this.scientist.body.setVelocityY(-800);
             this.scientist.setOffset(20, -20);
             this.scientist.setSize(150, 200);
             this.sound.play('jumpsfx');
             this.scientist.anims.play('jump');
+            this.physics.add.collider(this.scientist, this.pH);
+            this.physics.add.collider(this.scientist, this.pH2);
         }
 
         //reset to run on landing
@@ -405,7 +407,7 @@ class Forest extends Phaser.Scene {
             this.powerOnScreen = false;
             this.obstacleOnscreen = false;
             this.powerHit = true;
-            this.powerup = this.physics.add.image(game.config.width + 20, 100, 'powerup').setOrigin(0,0);
+            this.powerup = this.physics.add.image(game.config.width + 40, 100, 'powerup').setOrigin(0,0);
             this.powerOnVar = (Math.floor(this.timer.getElapsedSeconds() * 10)) + 5;
         } else if (this.obstacleOnscreen && this.powerup.x < -10){
             this.powerup.alpha = 0;
@@ -468,7 +470,7 @@ class Forest extends Phaser.Scene {
         }
 
         if(object == this.powerup){
-            this.powerup = this.physics.add.image(game.config.width, 0, 'powerup').setOrigin(0,0);
+            this.powerup = this.physics.add.image(game.config.width + 40, 0, 'powerup').setOrigin(0,0);
             this.powerup.setSize(100, 100, true);
             this.powerup.setOffset(0, 0);
             this.powerup.body.setAllowGravity(false);

@@ -100,6 +100,10 @@ class Lab extends Phaser.Scene {
         this.obstacleOnscreen = false;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // doorway
+        this.exit = this.add.image(1750, 10, 'exit').setOrigin(0,0);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add player
         this.scientist = this.physics.add.sprite(550, 480,'run').setOrigin(0.25, 0);
         this.scientist.setSize(200,280);
@@ -115,11 +119,11 @@ class Lab extends Phaser.Scene {
         let spider = this.add.sprite(-300, 40, 'spiderRun').setOrigin(0, 0);
         spider.anims.play('spiderRun');
 
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // define keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        //keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // GAME OVER
@@ -227,9 +231,10 @@ class Lab extends Phaser.Scene {
             this.scientist.isJumping = true;
             this.scientist.body.setVelocityY(-350);
             this.scientist.setOffset(20, -20);
-            this.scientist.setSize(210, 200);
+            this.scientist.setSize(150, 200);
             this.sound.play('jumpsfx');
             this.scientist.anims.play('jump');
+            this.physics.add.collider(this.scientist, this.pH);
         }
 
         //reset to run on landing
@@ -328,14 +333,12 @@ class Lab extends Phaser.Scene {
         // Level 2 transition
         if((Math.floor(this.timer.getElapsedSeconds() * 10) > 60))
         {
-            // Obstacles stop sending after 60 seconds
-
             // Doorway appears after 65 seconds
             if((Math.floor(this.timer.getElapsedSeconds() * 10) > 65))
             { 
-                this.exit = this.add.image(1400, 10, 'exit').setOrigin(0,0);
+                this.exit.x = 1435;
                 this.scientist.setCollideWorldBounds(false);
-                this.scientist.setVelocity(400, 0);
+                this.scientist.setVelocity(300, 0);
                 this.gameOver = true;
                 
                 // Level 2 starts after 70 seconds
