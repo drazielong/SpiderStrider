@@ -15,7 +15,7 @@ class Forest extends Phaser.Scene {
         this.load.image('obs02', './assets/net.png');
         this.load.image('obs03', './assets/trapSpider.png');
         this.load.image('pH', './assets/placeHolder.png');
-        this.load.image('powerup', './assets/powerup.png');
+        //this.load.image('powerup', './assets/powerup.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
@@ -25,6 +25,7 @@ class Forest extends Phaser.Scene {
         this.load.spritesheet('spiderClimb2', './assets/topForestSpritesheet.png', {frameWidth: 375, frameHeight: 254, startFrame: 0, endFrame: 7});
         this.load.spritesheet('bspiderClimb', './assets/topForestSpritesheet2.png', {frameWidth: 375, frameHeight: 254, startFrame: 7, endFrame: 0});
         this.load.spritesheet('spiderDrop', './assets/swingingSpritesheet.png', {frameWidth: 160, frameHeight: 330, startFrame: 7, endFrame: 0});
+        this.load.spritesheet('powerup', './assets/powerup_spritesheet.png', {frameWidth: 140, frameHeight: 140, startFrame: 0, endFrame: 3});
     }
 
     create() {
@@ -66,7 +67,7 @@ class Forest extends Phaser.Scene {
         this.anims.create({
             key: 'spiderRun',
             frames: this.anims.generateFrameNumbers('spiderRun', { start: 0, end: 7, first: 0}),
-            frameRate: 10,
+            frameRate: 15,
             repeat: -1
         });
 
@@ -80,6 +81,13 @@ class Forest extends Phaser.Scene {
         this.anims.create({
             key: 'spiderDrop',
             frames: this.anims.generateFrameNumbers('spiderDrop', { start: 0, end: 7, first: 0}),
+            frameRate: 4,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'powerup',
+            frames: this.anims.generateFrameNumbers('powerup', { start: 3, end: 0, first: 3}),
             frameRate: 12,
             repeat: -1
         });
@@ -109,7 +117,7 @@ class Forest extends Phaser.Scene {
 
         this.obs05 = this.physics.add.sprite(game.config.width + 20, 0, 'spiderDrop').setOrigin(0,0);
         this.obs05.setSize(100, 300, true);
-        this.obs05.setOffset(0, 0);
+        this.obs05.setOffset(0, 50);
         this.obs05.body.setAllowGravity(false);
         this.obs05.anims.play('spiderDrop');
 
@@ -139,7 +147,7 @@ class Forest extends Phaser.Scene {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // powerup
-        this.powerup = this.physics.add.image(game.config.width + 60, 0, 'powerup').setOrigin(0,0);
+        this.powerup = this.physics.add.sprite(game.config.width + 60, 0, 'powerup').setOrigin(0,0);
         this.powerup.setSize(100, 100, true);
         this.powerup.setOffset(0, 0);
         this.powerup.body.setAllowGravity(false);
@@ -147,12 +155,12 @@ class Forest extends Phaser.Scene {
         this.powerOnScreen = false;
         this.powerOnVar = 0;
         this.powerHit = false;
+        this.powerup.anims.play('powerup');
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // define keys
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        //keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // GAME OVER
@@ -210,11 +218,12 @@ class Forest extends Phaser.Scene {
         this.background.tilePositionX += 5;
         this.midground.tilePositionX += 10;
         this.foreground.tilePositionX += 20;
-
+ 
         // placeholder physics
         this.physics.add.collider(this.scientist, this.pH);
         this.pH.setVelocity(0, 0);
-        
+               
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check if on screen
         if((this.obs01.x >= 0 && this.obs01.x <= game.config.width + 19) || (this.obs02.x >= 0 && this.obs02.x <= game.config.width + 19) || (this.obs03.x >= 0 && this.obs03.x <= game.config.width + 19) || (this.obs04.x >= 0 && this.obs04.x <= game.config.width + 19) || (this.obs05.x >= 0 && this.obs05.x <= game.config.width + 19))
         {
@@ -229,18 +238,21 @@ class Forest extends Phaser.Scene {
         } else{
             this.powerOnScreen = false;
         }
-
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // if !onScreen then send obstacle
         if(this.obstacleOnscreen == false && (Math.floor(this.timer.getElapsedSeconds() * 10) > 1) && this.powerOnScreen == false)
         {
-            var value = Phaser.Math.Between(1, 5);
-            
+            //var value = Phaser.Math.Between(1, 5);
+            var value = 5;
+
             if((Math.floor(this.timer.getElapsedSeconds() * 10) > (30*this.powerVar)-2) && (Math.floor(this.timer.getElapsedSeconds() * 10) < (30*this.powerVar)+2)) {
                 this.recreate(this.powerup);
                 this.obstacleOnscreen = true;
                 this.powerOnScreen = true;
                 this.powerVar += 1;
             } else if(this.powerOnScreen == false) {
+
                 if(value == 1) {
                     this.recreate(this.obs01);
                     this.obstacleOnscreen = true;
@@ -317,6 +329,11 @@ class Forest extends Phaser.Scene {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // check collisions on all objects
         if (this.powerOnVar < (Math.floor(this.timer.getElapsedSeconds() * 10)) || this.powerHit == false) { 
+
+            if(this.scientist.alpha < 1){
+                this.scientist.alpha = 1;
+            }
+            else{
             if(this.checkCollision(this.scientist, this.obs01)) {
                 this.timesHit++;
                 this.cameras.main.shake(200);
@@ -385,6 +402,7 @@ class Forest extends Phaser.Scene {
                 this.obs05.destroy();
                 this.obstacleOnscreen = false;
             }
+            }
         }
 
         // checks hits on powerup, resets on hit
@@ -394,8 +412,9 @@ class Forest extends Phaser.Scene {
             this.powerOnScreen = false;
             this.obstacleOnscreen = false;
             this.powerHit = true;
-            this.powerup = this.physics.add.image(game.config.width + 60, 100, 'powerup').setOrigin(0,0);
+            this.powerup = this.physics.add.sprite(game.config.width + 60, 100, 'powerup').setOrigin(0,0);
             this.powerOnVar = (Math.floor(this.timer.getElapsedSeconds() * 10)) + 5;
+            this.scientist.alpha = 0.5;
         } else if (this.powerOnScreen && this.powerup.x < -10){
             this.powerup.alpha = 0;
             this.powerup.destroy();
@@ -449,19 +468,20 @@ class Forest extends Phaser.Scene {
 
         if(object == this.obs05){
             this.obs05 = this.physics.add.sprite(game.config.width, 0, 'spiderDrop').setOrigin(0,0);
-            this.obs05.setSize(100, 300, true);
-            this.obs05.setOffset(50, 20);
+            this.obs05.setSize(100, 270, true);
+            this.obs05.setOffset(0, 50);
             this.obs05.body.setAllowGravity(false);
             this.obs05.setVelocity(-900, 0);
             this.obs05.anims.play('spiderDrop');
         }
 
         if(object == this.powerup){
-            this.powerup = this.physics.add.image(game.config.width, 0, 'powerup').setOrigin(0,0);
+            this.powerup = this.physics.add.sprite(game.config.width, 0, 'powerup').setOrigin(0,0);
             this.powerup.setSize(100, 100, true);
             this.powerup.setOffset(0, 0);
             this.powerup.body.setAllowGravity(false);
             this.powerup.setVelocity(-1300, 0);
+            this.powerup.anims.play('powerup');
         }
     }
 
