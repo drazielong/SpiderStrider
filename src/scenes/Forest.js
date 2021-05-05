@@ -458,7 +458,7 @@ class Forest extends Phaser.Scene {
             this.playBGM.stop();
             this.timer.paused = true;
             this.gameOver = true;
-            this.scene.start("endScene", { time: Math.floor(this.timer.getElapsedSeconds() * 10) });
+            this.scene.start("endScene", { time: (Math.floor(this.timer.getElapsedSeconds() * 10) + 60) });
         }
     }
 
