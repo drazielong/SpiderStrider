@@ -13,6 +13,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('slidesfx', './assets/Slide_spider.wav');
         this.load.audio('powersfx', './assets/Powerup35.wav');
         this.load.audio('bgm', './assets/Spook_arcade.m4a');
+        this.load.audio('powerOnsfx', './assets/Powerup13.wav');
     }
 
     create() {

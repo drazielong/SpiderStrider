@@ -15,7 +15,6 @@ class Forest extends Phaser.Scene {
         this.load.image('obs02', './assets/net.png');
         this.load.image('obs03', './assets/trapSpider.png');
         this.load.image('pH', './assets/placeHolder.png');
-        //this.load.image('powerup', './assets/powerup.png');
 
         // spritesheets
         this.load.spritesheet('slide', './assets/slide_spritesheet.png', {frameWidth: 340, frameHeight: 300, startFrame: 0, endFrame: 3});
@@ -228,9 +227,11 @@ class Forest extends Phaser.Scene {
         }
 
         // parallax scrolling
+        if ((Math.floor(this.timer.getElapsedSeconds() * 10) <= 90)) {
         this.background.tilePositionX += 5;
         this.midground.tilePositionX += 10;
         this.foreground.tilePositionX += 20;
+        }
  
         // placeholder physics
         this.physics.add.collider(this.scientist, this.pH);
@@ -445,6 +446,7 @@ class Forest extends Phaser.Scene {
             this.powerup = this.physics.add.sprite(game.config.width + 60, 100, 'powerup').setOrigin(0,0);
             this.powerOnVar = (Math.floor(this.timer.getElapsedSeconds() * 10)) + 5;
             this.scientist.alpha = 0.5;
+            this.sound.play('powerOnsfx');
         } else if (this.powerOnScreen && this.powerup.x < -10){
             this.powerup.alpha = 0;
             this.powerup.destroy();
