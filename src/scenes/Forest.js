@@ -159,7 +159,7 @@ class Forest extends Phaser.Scene {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // powerup
-        this.powerup = this.physics.add.sprite(game.config.width + 60, 0, 'powerup').setOrigin(0,0);
+        this.powerup = this.physics.add.sprite(game.config.width + 60, 30, 'powerup').setOrigin(0,0);
         this.powerup.setSize(100, 100, true);
         this.powerup.setOffset(0, 0);
         this.powerup.body.setAllowGravity(false);
@@ -453,7 +453,7 @@ class Forest extends Phaser.Scene {
             this.powerOnScreen = false;
             this.obstacleOnscreen = false;
             this.powerHit = true;
-            this.powerup = this.physics.add.sprite(game.config.width + 60, 100, 'powerup').setOrigin(0,0);
+            this.powerup = this.physics.add.sprite(game.config.width + 60, 30, 'powerup').setOrigin(0,0);
             this.powerOnVar = (Math.floor(this.timer.getElapsedSeconds() * 10)) + 5;
             this.scientist.alpha = 0.5;
             this.sound.play('powerOnsfx');
@@ -552,7 +552,7 @@ class Forest extends Phaser.Scene {
         }
 
         if(object == this.powerup){
-            this.powerup = this.physics.add.sprite(game.config.width, 0, 'powerup').setOrigin(0,0);
+            this.powerup = this.physics.add.sprite(game.config.width, 30, 'powerup').setOrigin(0,0);
             this.powerup.setSize(100, 100, true);
             this.powerup.setOffset(0, 0);
             this.powerup.body.setAllowGravity(false);
