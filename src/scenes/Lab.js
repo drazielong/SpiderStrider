@@ -34,7 +34,7 @@ class Lab extends Phaser.Scene {
 
         // this acts as an invisible box so that the player doesnt get pushed off screen
         this.pH = this.physics.add.image(-100, 470, 'pH').setOrigin(0,0);
-        this.pH.setSize(370, 480, true);
+        this.pH.setSize(390, 480, true);
         this.pH.setOffset(120, 0);
         this.pH.setCollideWorldBounds(true);
 
@@ -76,19 +76,19 @@ class Lab extends Phaser.Scene {
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add obstacles
-        this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
+        this.ob01 = this.physics.add.image(game.config.width + 20, 315, 'ob01').setOrigin(0,0);
         this.ob01.setSize(200, 100, true);
         this.ob01.setOffset(50, 10);
         this.ob01.body.setAllowGravity(false);
 
-        this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
+        this.ob02 = this.physics.add.image(game.config.width + 20, 290, 'ob02').setOrigin(0,0);
         this.ob02.setSize(100, 150, true);
         this.ob02.setOffset(50, 10);
         this.ob02.body.setAllowGravity(false);
 
         this.ob03 = this.physics.add.image(game.config.width + 20, 0, 'ob03').setOrigin(0,0);
-        this.ob03.setSize(300, 150, true);
-        this.ob03.setOffset(0, 350);
+        this.ob03.setSize(300, 100, true);
+        this.ob03.setOffset(20, 350);
         this.ob03.body.setAllowGravity(false);
 
         this.ob04 = this.physics.add.sprite(game.config.width + 20, -10, 'spiderClimb').setOrigin(0,0);
@@ -229,7 +229,7 @@ class Lab extends Phaser.Scene {
         if(!this.scientist.isJumping && Phaser.Input.Keyboard.JustDown(keyW) && this.scientist.body.blocked.down && !this.scientist.isSliding){ 
             this.scientist.isRunning = false;
             this.scientist.isJumping = true;
-            this.scientist.body.setVelocityY(-350);
+            this.scientist.body.setVelocityY(-400);
             this.scientist.setOffset(20, -20);
             this.scientist.setSize(150, 200);
             this.sound.play('jumpsfx');
@@ -273,7 +273,7 @@ class Lab extends Phaser.Scene {
                 this.ob01.alpha = 0;
                 this.ob01.destroy();
                 this.obstacleOnscreen = false;
-                this.ob01 = this.physics.add.image(game.config.width + 20, 320, 'ob01').setOrigin(0,0);
+                this.ob01 = this.physics.add.image(game.config.width + 20, 315, 'ob01').setOrigin(0,0);
             } else if (this.obstacleOnscreen && this.ob01.x < -300){ 
                 this.ob01.alpha = 0;
                 this.ob01.destroy();
@@ -287,7 +287,7 @@ class Lab extends Phaser.Scene {
                 this.ob02.alpha = 0;
                 this.ob02.destroy();
                 this.obstacleOnscreen = false;
-                this.ob02 = this.physics.add.image(game.config.width + 20, 300, 'ob02').setOrigin(0,0);
+                this.ob02 = this.physics.add.image(game.config.width + 20, 290, 'ob02').setOrigin(0,0);
             } else if (this.obstacleOnscreen && this.ob02.x < -300){
                 this.ob02.alpha = 0;
                 this.ob02.destroy();
@@ -352,7 +352,7 @@ class Lab extends Phaser.Scene {
 
     recreate(object) {
         if(object == this.ob01){
-            this.ob01 = this.physics.add.image(game.config.width, 330, 'ob01').setOrigin(0,0)
+            this.ob01 = this.physics.add.image(game.config.width, 315, 'ob01').setOrigin(0,0)
             this.ob01.setSize(200, 100, true);
             this.ob01.setOffset(50, 10);
             this.ob01.body.setAllowGravity(false);
@@ -360,7 +360,7 @@ class Lab extends Phaser.Scene {
         }
 
         if(object == this.ob02){
-            this.ob02 = this.physics.add.image(game.config.width, 300, 'ob02').setOrigin(0,0)
+            this.ob02 = this.physics.add.image(game.config.width, 290, 'ob02').setOrigin(0,0)
             this.ob02.setSize(100, 150, true);
             this.ob02.setOffset(50, 10);
             this.ob02.body.setAllowGravity(false);
@@ -370,7 +370,7 @@ class Lab extends Phaser.Scene {
         if(object == this.ob03){
             this.ob03 = this.physics.add.image(game.config.width, 0, 'ob03').setOrigin(0,0)
             this.ob03.setSize(300, 150, true);
-            this.ob03.setOffset(0, 350);
+            this.ob03.setOffset(20, 350);
             this.ob03.body.setAllowGravity(false);
             this.ob03.setVelocity(-500, 0);
         }
